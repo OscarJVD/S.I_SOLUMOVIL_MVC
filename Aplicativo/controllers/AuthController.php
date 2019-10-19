@@ -52,7 +52,7 @@ class AuthController
               if($response){
                     header("location:?c=auth&m=index_pass");
                 }else{
-                    header("location:?user=".$user);
+                    header("location:?msg=user_not_found");
                }
        
         }

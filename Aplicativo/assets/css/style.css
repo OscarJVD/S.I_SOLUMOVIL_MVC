@@ -1,11 +1,5 @@
-
-body{
-    background-color: rgba(245, 245, 245, 1.902);
-}
-@media (min-width:700px){
-.login{
-    height: 500px;
-     width: 40%;
-      
-}
+@media screen and (min-width:650px){
+.altocar {
+  height: 135px;
+} 
 }

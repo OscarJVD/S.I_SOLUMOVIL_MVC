@@ -1,3 +1,11 @@
+  <div class="card mb-3">
+    <div class="card-header">
+      <i class="fas fa-table"></i>
+      Data Table Example</div>
+    <div class="card-body">
+            
+
+
 <form method="post" class="form-horizontal "enctype="multipart/form-data">
           <div>
           <input type="hidden" name="c" value="user">
@@ -87,7 +95,11 @@
                       <div class="col-sm-9">
                       
                      </div>
-                 </div>
-      </div>
+
       </div>
       </form>
+
+      </div>
+    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+  </div>
+</div>

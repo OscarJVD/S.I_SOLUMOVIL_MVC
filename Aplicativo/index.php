@@ -1,6 +1,7 @@
 <?php
 // Este el el FrontController
     // iniciamos las variables de sesion
+    date_default_timezone_set('America/Bogota');
     session_start();
     // traemos los archivos para iniciar la base de datos
     include_once "config/config.php";

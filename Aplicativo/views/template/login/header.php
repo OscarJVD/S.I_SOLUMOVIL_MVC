@@ -7,7 +7,7 @@
    <!-- se traen las librerias  -->
     <link rel="stylesheet" href="libs/fontawesome-5.1/css/all.min.css">
     <link rel="stylesheet" href="libs/bootstrap-4.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/login.css">
     <meta name="author" content="Andres Lobaton">
     <meta name="descripcion" content="Proyecto tecnico Solumovil del Sena">
     <meta name="date" content="octubre-2019">

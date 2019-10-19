@@ -1,3 +1,6 @@
+ 
+  <!-- javascript para el formulario -->
+  <script src="assets/js/login.js"></script>
    <!-- incluyo la libreria de popovers -->
    <script src="libs/bootstrap-4.3/js/popovers.min.js"></script>
     <!-- se trae la libreria de logos  -->

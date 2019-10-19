@@ -1,5 +1,4 @@
 //funcionamiento de los popovers y tooltips
-console.log("Activacion del popover"); 
 
 $(function () {
     // popovers
@@ -11,8 +10,7 @@ $(function () {
       title:"Solumovil"
     });
 
-    // tooltips
-    // actualizar
+  //  activacion
     $('[data-toggle="tool"]').tooltip();
     
 

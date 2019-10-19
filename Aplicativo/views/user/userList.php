@@ -1,4 +1,9 @@
-<br>
+<div class="card mb-3">
+    <div class="card-header">
+      <i class="fas fa-chart-area"></i>
+      Listado de usuarios</div>
+    <div class="card-body">
+
 
      <div class="table-responsive">
        <table class="table table-bordered border-dark">
@@ -36,6 +41,7 @@
         <?php endforeach; ?>
        </tbody>
      </table>
+     <!-- paginacion -->
      <nav aria-label="" class="float-right">
                 <ul class="pagination">
           <?php if($page != 1){ ?>
@@ -72,3 +78,7 @@
             </ul>
           </nav>
      </div>
+ 
+    </div>
+    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+  </div>

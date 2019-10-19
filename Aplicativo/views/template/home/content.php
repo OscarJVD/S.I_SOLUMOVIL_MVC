@@ -1,13 +1,11 @@
 <?php
      require_once "views/template/home/header.php";
-     require_once "views/template/home/menuTop.php";
-     require_once "views/template/home/menuLeft.php";
+     require_once "views/template/home/navbar.php";
+     require_once "views/template/home/sidebar.php";
 
 ?>
-<br>
-<div class="container">
+
     <?php require "views/".$content;?>
-</div>
 
 <?php
         require_once "views/template/home/footer.php";
