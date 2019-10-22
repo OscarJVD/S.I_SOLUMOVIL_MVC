@@ -11,6 +11,7 @@
 				    	<input class="mb-5" type="text" id="nombre" value=""  name="user">
 				    	<label class="label" for="nombre">Nickname del usuario</label>
 					</div>
+					<?php require "views/login/errorHandler.php";?>
 					<div class="form-group">
 							<span><a href="#">¿Olvidate tu usuario?</a></span>
 					  <input type="submit" class="btn btn-primary btn-md float-right" value="Siguiente"> 

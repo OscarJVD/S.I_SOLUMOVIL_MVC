@@ -7,7 +7,7 @@
 
 
 <form method="post" class="form-horizontal "enctype="multipart/form-data">
-          <div>
+     
           <input type="hidden" name="c" value="user">
           <input type="hidden" name="m" value="save">
           <input type="hidden" name="id_user" value="">
@@ -87,19 +87,13 @@
                      </div>
                  </div>
     
+                 <div class="text-right">
+                    <button type="submit" class="btn btn-success">Registrar</button>
+                    <button type="button" onclick="window.location.replace('?c=user&m=index');"  class="btn btn-secondary">Cancelar</button>
                  </div>
-                 <div  class="form-group row">
-                        <label for="referencia" class="col-sm-3 control-label">
-                             <input type="submit" class="btn btn-success" value="Registrar Usuario">
-                        </label>
-                      <div class="col-sm-9">
-                      
-                     </div>
+         </form>
 
       </div>
-      </form>
-
-      </div>
-    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+      <div class="card-footer small text-muted">Actualizado Hoy <?php echo date('h:i a');?></div>
   </div>
 </div>

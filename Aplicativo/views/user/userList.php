@@ -1,12 +1,12 @@
 <div class="card mb-3">
     <div class="card-header">
-      <i class="fas fa-chart-area"></i>
-      Listado de usuarios</div>
+      <i class="fas fa-fw fa-user"></i>
+       Listado de usuarios</div>
     <div class="card-body">
 
 
      <div class="table-responsive">
-       <table class="table table-bordered border-dark">
+       <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
         <thead>
           <tr>
              <th>#</th>
@@ -16,19 +16,35 @@
              <th>Telefono</th>
              <th>Rol</th>
              <th>Estado</th>
+             <th>Date</th>
              <th>Accion</th>
           </tr>
         </thead>
+        <tfoot>
+          <tr>
+             <th>#</th>
+             <th>Nombres</th>
+             <th>Apellidos</th>
+             <th>Correo</th>
+             <th>Telefono</th>
+             <th>Rol</th>
+             <th>Estado</th>
+             <th>Date</th>
+             <th>Accion</th>
+          </tr>
+        </footd>
        <tbody>
-        <?php foreach($rows as $row): ?>
+        <?php foreach($rows as $row): 
+        $date = new DateTime($row->fecha_creacion_usuario);?>
              <tr>
              <th><?php echo $row->id_usuario_PK; ?></th>
              <td><?php echo $row->nombres_usuario; ?></td>
              <td><?php echo $row->apellidos_usuario; ?></td>
              <td><?php echo $row->correo_usuario; ?></td>
              <td><?php echo $row->telefono_usuario; ?></td>
-             <td><?php echo $row->id_rol_usuario_FK == 1 ? "Administrador" : "Vendedor" ?></td>
+             <td><?php echo $row->id_rol_usuario_FK == 1 ? "Jefe" : "Vendedor" ?></td>
              <td><?php echo $row->id_estado_FK == 1 ? "Activo" : "Inactivo"; ?></td>
+             <td><?php echo $date->format('Y'); ?></td>
              <td>
              <a href="?c=user&m=show&id=<?php echo $row->id_usuario_PK?>" class="btn btn-outline-default" tabindex="0" title="Actualizar" data-toggle="tool"><i class="fas fa-edit"></i></a>
              <?php if($row->id_usuario_PK !== $_SESSION["id_user"]): ?>
@@ -41,44 +57,8 @@
         <?php endforeach; ?>
        </tbody>
      </table>
-     <!-- paginacion -->
-     <nav aria-label="" class="float-right">
-                <ul class="pagination">
-          <?php if($page != 1){ ?>
-                 <li class="page-item ">
-                  <a class="page-link" href="?c=user&m=index&num=<?php echo $page-1; ?>" tabindex="-1" aria-disabled="true">Previous</a>
-                  </li>
-          <?php }else{ ?>
-            <li class="page-item disabled">
-                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                  </li>
-        <?php }
-             for($i = 1; $i <= $paginate;$i++){
-                if($i != $page){
-          ?>
-                 <li class="page-item"><a class="page-link" href="<?php echo "?c=user&m=index&num={$i}"; ?>"><?php echo $i;?></a></li>
-
-         <?php  }else{ ?>
-
-                   <li class="page-item active" aria-current="page"><a class="page-link" href="<?php echo "?c=user&m=index&num={$i}"; ?>"><?php echo $i;?></a></li>
-         <?php          
-                   }
-              }
-           if($page != $paginate ){
-          ?>
-              <li class="page-item">
-                <a class="page-link" href="?c=user&m=index&num=<?php echo $page+1; ?>">Next</a>
-              </li>
-           <?php }else{ ?>
-           
-            <li class="page-item disabled">
-                <a class="page-link" href="">Next</a>
-            </li>
-           <?php }?>
-            </ul>
-          </nav>
      </div>
- 
+
     </div>
-    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+    <div class="card-footer small text-muted">Actualizado Hoy <?php echo date('h:i a');?></div>
   </div>

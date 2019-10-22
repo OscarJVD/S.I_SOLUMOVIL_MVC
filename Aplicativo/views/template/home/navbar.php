@@ -116,7 +116,7 @@
   <div class="modal-body">¿Estas seguro de cerrar tu sesion?</div>
   <div class="modal-footer">
     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-    <a class="btn btn-primary" href="?c=auth&m=index&msg=logout">Cerrar la Sesion</a>
+    <a class="btn btn-primary" href="?c=auth&m=index&msg=logout&type=success">Cerrar la Sesion</a>
   </div>
 </div>
 </div>

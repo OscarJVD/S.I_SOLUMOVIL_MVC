@@ -1,9 +1,17 @@
+
+<div class="card mb-3">
+    <div class="card-header">
+    <i class="fas fa-fw fa-user"></i>
+     Actualizar Usuario</div>
+    <div class="card-body">
+
 <form method="post" class="form-horizontal" enctype="multipart/form-data">
           
           <input type="hidden" name="c" value="user">
           <input type="hidden" name="m" value="update">
           <input type="hidden" name="id_user" value="<?php echo $user->id_usuario_PK;  ?>">
           <input type="hidden" name="est" value= 1 >
+          <input type="hidden" name="foto_usuario" value="<?php echo $user->foto_usuario;  ?>">
 
 
                    <div class="form-group row">
@@ -93,15 +101,13 @@
                           <img style="width:100px;height:100px" src="<?php echo $user->foto_usuario; ?>" alt="..." class="rounded">
                      </div>
                  </div>
-
-                 <div  class="form-group row">
-                        <label for="referencia" class="col-sm-3 control-label">
-                             <input type="submit" class="btn btn-success" value="Actualizar Usuario">
-                        </label>
-                      <div class="col-sm-9">
-                      
-                     </div>
+                   
+                 <div class="text-right">
+                    <button type="submit" class="btn btn-success">Actualizar</button>
+                    <button type="button" onclick="window.location.replace('?c=user&m=index');"  class="btn btn-secondary">Cancelar</button>
                  </div>
-
-      
       </form>
+
+      </div>
+    <div class="card-footer small text-muted">Actualizado Hoy <?php echo date('h:i a');?></div>
+  </div>

@@ -14,7 +14,7 @@ class User
     public function loginUser($user)
     {
       try{
-       $sql = "select * from Usuario where nickname_usuario = :nickname";
+       $sql = "SELECT * from Usuario where nickname_usuario = :nickname";
        $stmt = $this->dbh->prepare($sql);
        $stmt->bindParam(":nickname",$user);
        $stmt->execute();
@@ -40,7 +40,7 @@ class User
 
    public function loginPass($pass){
 
-    $sql = "select * from Usuario where nickname_usuario = :nickname";
+    $sql = "SELECT  * from Usuario where nickname_usuario = :nickname";
     try{
       $stmt = $this->dbh->prepare($sql);
       $stmt->bindParam(":nickname",$_SESSION["nickname_user"]);
@@ -52,7 +52,13 @@ class User
         $_SESSION["id_user"] = $response->id_usuario_PK;
         $_SESSION["rol_user"] = $response->id_rol_usuario_FK;   
         $_SESSION["email_user"] = $response->correo_usuario; 
-
+        // realiza un historia de cuando un usuario inica sesion
+        $fecha = date("Y-m-d"); 
+        $hora = date("G:i:s"); 
+        
+        $stmt = $this->dbh->prepare("INSERT INTO Registro_Login (id_usuario_FK,fecha,hora) VALUE ( ?,?,? )");
+        $stmt->execute(array($response->id_usuario_PK,$fecha,$hora));
+        
         return true;
       }else{
         return false;
@@ -65,32 +71,13 @@ class User
 
 
 
-    public function getall($num)
+    public function getall()
     {
       try{
-      $size = 6;
-      $page = 1;
-
-      if(isset($num)):
-           $page = $num;
-      endif;
-
-        
-         $stmt = $this->dbh->prepare("select * from usuario");
+         $stmt = $this->dbh->prepare("SELECT * FROM usuario WHERE inactivacion_usuario = 1");
          $stmt->execute();
-         $rows = $stmt->rowCount();
-         
-         $paginate = ceil($rows / $size);
-         $page = $page > $paginate ? 1 :$page;
-         $ini = ($page - 1) * $size; 
-
-         $sql = "select * from usuario limit $ini,$size";
-         $stmt = $this->dbh->prepare($sql);
-         $stmt->execute();
-         $response = $stmt->fetchAll();
-
-         $answer = array($response,$page,$paginate);
-         return $answer;
+         $rows = $stmt->fetchAll();
+          return $rows;
 
         }catch(Exception $e){
           exit($e->getMessage());
@@ -104,12 +91,12 @@ class User
     {
       try{
         
-        $stmt = $this->dbh->prepare("select * from usuario where id_usuario_PK = :id");
+        $stmt = $this->dbh->prepare("SELECT * from usuario where id_usuario_PK = :id and inactivacion_usuario = 1");
         $stmt->bindParam(":id",$id);
         $stmt->execute();
-        $response = $stmt->fetch();
+        return  $stmt->fetch();
+        
 
-        return $response;
        }catch(Exception $e){
          exit($e->getMessage());
        }
@@ -121,7 +108,7 @@ class User
     public function insert($data)
     { 
          try{
-           $sql = "insert into Usuario(id_tipo_documento_FK,
+           $sql = "INSERT into Usuario(id_tipo_documento_FK,
                                        numero_documento_usuario,
                                        nombres_usuario,
                                        apellidos_usuario,
@@ -194,7 +181,7 @@ class User
                $stmt->execute();
         }
         try{
-          $sql = "update Usuario set id_tipo_documento_FK     = :tipoDoc,
+          $sql = "UPDATE Usuario set id_tipo_documento_FK     = :tipoDoc,
                                      numero_documento_usuario = :numDoc,
                                      nombres_usuario          = :names,
                                      apellidos_usuario        = :surnames ,
@@ -217,21 +204,21 @@ class User
                  if(!file_exists($ruta)){
                       mkdir($ruta,0777,true);
                         if(file_exists($ruta)){
-                          if($_SESSION["img_user"] != "assets/img/user/avatar.png"){
-                                unlink($_SESSION["img_user"]);
+                          if($data["foto_usuario"] != "assets/img/user/avatar.png"){
+                            unlink($data["foto_usuario"]);
                           }
                            move_uploaded_file($tmp,$ruta."/".$img);
                          }
                    }else{
                         if(file_exists($ruta)){
-                          if($_SESSION["img_user"] != "assets/img/user/avatar.png"){
-                                unlink($_SESSION["img_user"]);
+                          if($data["foto_usuario"] != "assets/img/user/avatar.png"){
+                                unlink($data["foto_usuario"]);
                           }
                            move_uploaded_file($tmp,$ruta."/".$img);
                        }
                   }
           }else{
-                  $rutadb = $_SESSION["img_user"];
+                  $rutadb = $data["foto_usuario"];
               }
 
             $stmt = $this->dbh->prepare($sql);
@@ -264,7 +251,7 @@ class User
       $ruta = "assets/img/user".$id;
           if(file_exists($ruta)){
 
-              $sql = "select foto_usuario from Usuario where id_usuario_PK = ?";
+              $sql = "SELECT foto_usuario from Usuario where id_usuario_PK = ?";
               $stmt = $this->dbh->prepare($sql);
               $stmt->execute(array($id));
               $foto = $stmt->fetch();   
@@ -278,7 +265,7 @@ class User
              }
           }
       try{
-        $sql = "delete from Usuario where id_usuario_PK = :id";
+        $sql = "UPDATE Usuario SET inactivacion_usuario = 0 WHERE id_usuario_PK = :id";
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindParam(":id",$id);
         $stmt->execute();
@@ -296,10 +283,23 @@ class User
         $stmt->execute();
         $response = $stmt->fetch();
         $_SESSION["img_user"] = $response->foto_usuario; 
-
+        return true;
        }catch(Exception $e){
          exit($e->getMessage());
        }
     }
-}
+// provicional
+  public function loginuserhistory()
+  {
+    try{
+    $stmt = $this->dbh->prepare("SELECT * FROM Historial_Registro_Login");
+    $stmt->execute();
+    return $stmt->fetchAll();
+
+   }catch(Exception $e){
+     exit($e->getMessage());
+   }
+  }
+
+  }
 ?>

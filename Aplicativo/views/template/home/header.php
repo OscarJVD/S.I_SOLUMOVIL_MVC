@@ -13,7 +13,7 @@
     <!-- librerias y demas -->
     <link rel="stylesheet" href="libs/charts/morris.css">
     <link href="libs/template-bootstrap/css/sb-admin.min.css" rel="stylesheet">
-    <link href="libs/template-bootstrap/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <link href="libs/template-bootstrap/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
      <!-- insertar icono -->
 	<link class="icon" rel=icon sizes="32x32" type="image/png" href='assets/img/empresa/logo.jpg'>

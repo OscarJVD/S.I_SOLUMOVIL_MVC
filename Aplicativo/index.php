@@ -35,13 +35,13 @@
                        call_user_func(array($controller,$method));
 
                    }else{
-                    header("location:?404_method");
+                    header("location:?msg=page_not_found&type=danger");
                    } 
             }else{
-            header("location:?404_class");
+            header("location:?msg=page_not_found&type=danger");
             } 
         }else{
-            header("location:?404_file");
+            header("location:?msg=page_not_found&type=danger");
         }
          
     }

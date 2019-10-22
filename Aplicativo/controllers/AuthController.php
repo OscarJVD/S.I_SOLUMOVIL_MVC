@@ -44,7 +44,7 @@ class AuthController
               if($response){
                      header("location:?c=main");
                 }else{
-                     header("location:?c=auth&m=index_pass");
+                     header("location:?c=auth&m=index_pass&msg=user_not_found&type=danger");
                 }
         }else{
 
@@ -52,7 +52,7 @@ class AuthController
               if($response){
                     header("location:?c=auth&m=index_pass");
                 }else{
-                    header("location:?msg=user_not_found");
+                    header("location:?msg=user_not_found&type=danger");
                }
        
         }

@@ -10,7 +10,8 @@
 				    <div class="input-group">
 				    	<input class="mb-5" type="password" id="nombre" value=""  name="password" autofocus>
 				    	<label class="label" for="nombre">Contraseña</label>
-					</div>
+               </div>
+                  <?php require "views/login/errorHandler.php";?>
 					<div class="form-group">
 							<span><a href="#">¿Olvidate tu contraseña?</a></span>
 					  <input type="submit" class="btn btn-primary btn-md float-right" value="Iniciar Sesion"> 
