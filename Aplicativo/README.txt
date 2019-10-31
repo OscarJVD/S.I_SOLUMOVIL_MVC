@@ -1,0 +1,8 @@
+- rol de los usuarios, 
+- reaizar el proceso de venta !important
+- reaizar el proceso de compra !important
+- a�adir reportes
+- agregar en errorhandler a los objetos qu hacen falta. !impotant
+- realizar crud de marcas
+- notificaciones de loq eu se requiera 
+- crud de las notificaciones

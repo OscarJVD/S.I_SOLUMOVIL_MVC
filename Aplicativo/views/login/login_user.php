@@ -8,7 +8,7 @@
                     <input type="hidden" name="c" value="auth">
                     <input type="hidden" name="m" value="login">
 				    <div class="input-group">
-				    	<input class="mb-5" type="text" id="nombre" value=""  name="user">
+				    	<input class="mb-5" type="text" id="nombre" value=""  name="user" autofocus>
 				    	<label class="label" for="nombre">Nickname del usuario</label>
 					</div>
 					<?php require "views/login/errorHandler.php";?>

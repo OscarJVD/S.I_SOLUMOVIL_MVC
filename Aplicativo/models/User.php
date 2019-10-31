@@ -9,6 +9,7 @@ class User
     public function __construct()
     { 
        $this->dbh = Database::connection(); 
+
     }
 
     public function loginUser($user)
@@ -56,7 +57,7 @@ class User
         $fecha = date("Y-m-d"); 
         $hora = date("G:i:s"); 
         
-        $stmt = $this->dbh->prepare("INSERT INTO Registro_Login (id_usuario_FK,fecha,hora) VALUE ( ?,?,? )");
+        $stmt = $this->dbh->prepare("INSERT INTO Registro_Login (id_usuario_FK,fecha,hora) VALUES ( ?,?,? )");
         $stmt->execute(array($response->id_usuario_PK,$fecha,$hora));
         
         return true;
@@ -74,7 +75,7 @@ class User
     public function getall()
     {
       try{
-         $stmt = $this->dbh->prepare("SELECT * FROM usuario WHERE inactivacion_usuario = 1");
+         $stmt = $this->dbh->prepare("SELECT * FROM usuario WHERE inactivacion_usuario = 0");
          $stmt->execute();
          $rows = $stmt->fetchAll();
           return $rows;
@@ -91,7 +92,7 @@ class User
     {
       try{
         
-        $stmt = $this->dbh->prepare("SELECT * from usuario where id_usuario_PK = :id and inactivacion_usuario = 1");
+        $stmt = $this->dbh->prepare("SELECT * from usuario where id_usuario_PK = :id and inactivacion_usuario = 0");
         $stmt->bindParam(":id",$id);
         $stmt->execute();
         return  $stmt->fetch();
@@ -265,11 +266,24 @@ class User
              }
           }
       try{
-        $sql = "UPDATE Usuario SET inactivacion_usuario = 0 WHERE id_usuario_PK = :id";
+        $sql = "UPDATE Usuario SET inactivacion_usuario = 1 WHERE id_usuario_PK = :id";
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindParam(":id",$id);
         $stmt->execute();
         return true;
+      }catch(Exception $e){
+        exit($e->getMessage());
+      }
+    }
+
+    public function tipoDocumento()
+    { 
+      try{
+        $sql = "SELECT * FROM Tipo_Documento";
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+
       }catch(Exception $e){
         exit($e->getMessage());
       }

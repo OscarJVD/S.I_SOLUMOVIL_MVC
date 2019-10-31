@@ -29,7 +29,7 @@ class Producto
     {
       try{
         
-        $stmt = $this->dbh->prepare("SELECT * FROM Producto WHERE id_producto_PK = ? and inactivacion_producto = 1");
+        $stmt = $this->dbh->prepare("SELECT * FROM Producto WHERE id_producto_PK = ? and inactivacion_producto = 0");
         $stmt->execute(array($id));
         return $stmt->fetch();
 
@@ -107,7 +107,7 @@ class Producto
     { 
       try{
 
-        $sql = "UPDATE Producto SET inactivacion_producto = 0 WHERE id_producto_PK = ?";
+        $sql = "UPDATE Producto SET inactivacion_producto = 1 WHERE id_producto_PK = ?";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute(array($id));
         return true;
@@ -123,7 +123,7 @@ class Producto
     { 
       try{
 
-        $sql = "SELECT * FROM Categoria_Producto";
+        $sql = "SELECT * FROM Categoria_Producto Where inactivacion_categoria = 0";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();

@@ -29,7 +29,7 @@ class Servicio
     {
       try{
         
-        $stmt = $this->dbh->prepare("SELECT * FROM Servicio WHERE id_servicio_PK = ? and inactivacion_servicio = 1");
+        $stmt = $this->dbh->prepare("SELECT * FROM Servicio WHERE id_servicio_PK = ? and inactivacion_servicio = 0");
         $stmt->execute(array($id));
         return $stmt->fetch();
 
@@ -94,7 +94,7 @@ class Servicio
     { 
       try{
 
-        $sql = "UPDATE Servicio SET inactivacion_servicio = 0 WHERE id_servicio_PK = ?";
+        $sql = "UPDATE Servicio SET inactivacion_servicio = 1 WHERE id_servicio_PK = ?";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute(array($id));
         return true;
@@ -110,7 +110,7 @@ class Servicio
     { 
       try{
 
-        $sql = "SELECT * FROM Categoria_Servicio";
+        $sql = "SELECT * FROM Categoria_Servicio WHERE inactivacion_categoria = 0";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();

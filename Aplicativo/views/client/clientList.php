@@ -10,7 +10,7 @@
         <thead>
           <tr>
              <th>#</th>
-             <th>ID</th>
+             <!-- <th>ID</th> -->
              <th>Nombre</th>
              <th>Apellido</th>
              <th>correo</th>
@@ -23,7 +23,7 @@
         <tfoot>
         <tr>
              <th>#</th>
-             <th>ID</th>
+             <!-- <th>ID</th> -->
              <th>Nombre</th>
              <th>Apellido</th>
              <th>correo</th>
@@ -37,7 +37,7 @@
         <?php foreach($rows as $row): ?>
              <tr>
              <td><?php echo $row->id_cliente_PK; ?></td>
-             <td><?php echo $row->abreviacion." ".$row->Numero_documento_Cliente; ?></td>
+             <!-- <td><?php echo $row->abreviacion." ".$row->Numero_documento_Cliente; ?></td> -->
              <td><?php echo $row->nombre_cliente?></td>
              <td><?php echo $row->apellido_cliente; ?></td>
              <td><?php echo $row->correo_cliente; ?></td>

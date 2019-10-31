@@ -37,6 +37,25 @@ $(document).ready(function(){
          window.location.href = "?msg=session_expired_security&type=info";
 
 },1800000);
+
+
+
 });
   
 }
+
+$(document).ready(function(){
+   
+    $("#notificacion").click(function(){
+       
+      $.ajax({
+        url : "?c=notificacion&m=visualizado",
+        type: "GET",
+        success : function(data){
+          $("#badge-msg").html("");
+        }
+      });
+
+    });
+
+});

@@ -14,7 +14,7 @@ class Cliente
     {
       try{
         
-         $stmt = $this->dbh->prepare("SELECT * FROM Consulta_Clientes");
+         $stmt = $this->dbh->prepare("SELECT * FROM Cliente");
          $stmt->execute();
          return $stmt->fetchAll();
 
@@ -29,7 +29,7 @@ class Cliente
     {
       try{
         
-        $stmt = $this->dbh->prepare("SELECT * FROM Cliente WHERE id_cliente_PK = ? and inactivacion_cliente = 1");
+        $stmt = $this->dbh->prepare("SELECT * FROM Cliente WHERE id_cliente_PK = ? and inactivacion_cliente = 0");
         $stmt->execute(array($id));
         return $stmt->fetch();
 
@@ -111,7 +111,7 @@ class Cliente
     { 
       try{
 
-        $sql = "UPDATE Cliente SET inactivacion_cliente = 0 WHERE id_cliente_PK = ?";
+        $sql = "UPDATE Cliente SET inactivacion_cliente = 1 WHERE id_cliente_PK = ?";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute(array($id));
         return true;

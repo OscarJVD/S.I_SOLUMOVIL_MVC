@@ -93,7 +93,8 @@
                       <div class="input-group mb-3">
 
                            <div class="custom-file form-group">
-                             <input type="file" class="form-control-file"  name="img"  accept=".png,.jpg,.jpeg,.gif,.svg"> 
+                             <a href="#"> Click Aqui.</a></p>
+                             <input type="file"  class="form-control-file"  name="img"  accept=".png,.jpg,.jpeg,.gif,.svg"> 
                            </div>
                      </div>
                  </div>

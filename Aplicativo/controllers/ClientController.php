@@ -1,8 +1,9 @@
 <?php
 require_once "models/Cliente.php";
-
+require_once "models/Notificacion.php";
 class ClientController
 {
+   private $notificacion;
    private $model;
 
    public function __construct()
@@ -11,9 +12,7 @@ class ClientController
         header("location:?msg=session_expired&type=info");
 
     }
-        if($_SESSION["rol_user"] != 1){
-         header("location:?msg=rol_user_protected&type=danger");
-        }
+    $this->notificacion = new Notificacion();
      $this->model = new Cliente();
    } 
   
@@ -83,6 +82,7 @@ class ClientController
 
   public function delete()
   {
+     $this->notificacion->insertar(6,"ha eliminado un cliente");
      $response = $this->model->delete($_REQUEST["id"]);
      $msg = $response != false ? "deleted": "dont_deleted";
      header("location:?c=client&m=index&msg=".$msg);     

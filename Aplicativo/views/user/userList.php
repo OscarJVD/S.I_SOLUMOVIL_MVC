@@ -34,8 +34,9 @@
           </tr>
         </footd>
        <tbody>
-        <?php foreach($rows as $row): 
-        $date = new DateTime($row->fecha_creacion_usuario);?>
+        <?php foreach($rows as $row): ?>
+        <?php  $date = new DateTime($row->fecha_creacion_usuario);?>
+           <?php if($row->id_usuario_PK !== $_SESSION["id_user"]): ?>
              <tr>
              <th><?php echo $row->id_usuario_PK; ?></th>
              <td><?php echo $row->nombres_usuario; ?></td>
@@ -47,13 +48,12 @@
              <td><?php echo $date->format('Y'); ?></td>
              <td>
              <a href="?c=user&m=show&id=<?php echo $row->id_usuario_PK?>" class="btn btn-outline-default" tabindex="0" title="Actualizar" data-toggle="tool"><i class="fas fa-edit"></i></a>
-             <?php if($row->id_usuario_PK !== $_SESSION["id_user"]): ?>
                 <a onclick="javascript:return confirm('¿Seguro de eliminar este registro?');"
                  href="?c=user&m=delete&id=<?php echo $row->id_usuario_PK?>" class="btn btn-outline-default" tabindex="0" 
                  title="Eliminar" data-toggle="tool"><i class="fas fa-trash"></i></a>
-             <?php endif;?>
                </td>
              </tr>      
+             <?php endif;?>
         <?php endforeach; ?>
        </tbody>
      </table>

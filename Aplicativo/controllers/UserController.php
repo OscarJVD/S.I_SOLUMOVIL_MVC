@@ -1,9 +1,11 @@
 <?php
+require_once "models/Notificacion.php";
 require_once "models/User.php";
 require_once "helpers/getDate.php";
 class UserController
 {
    private $model;
+   private $notificacion;
 
    public function __construct()
    {
@@ -14,7 +16,7 @@ class UserController
         if($_SESSION["rol_user"] != 1){
          header("location:?msg=rol_user_protected&type=danger");
         }
-   
+     $this->notificacion = new Notificacion();
      $this->model = new User();
    } 
   
@@ -74,6 +76,7 @@ class UserController
    
          $response = $this->model->insert($_POST);
          $msg = $response != false ? "saved": "dont_saved";
+         $this->notificacion->insertar(5,"ha creado un usuario");
          header("location:?c=user&m=index&msg=".$msg);
       }else{
 
@@ -113,6 +116,7 @@ class UserController
 
    public function delete()
    {
+      $this->notificacion->insertar(5,"ha eliminado un usuario");
       $response = $this->model->delete($_REQUEST["id"]);
       if($response){ 
          header("location:?c=user&m=index&msg=deleted");     

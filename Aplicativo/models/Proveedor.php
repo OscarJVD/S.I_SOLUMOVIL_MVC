@@ -14,7 +14,7 @@ class Proveedor
     {
       try{
         
-         $stmt = $this->dbh->prepare("SELECT * FROM Proveedor where inactivacion_proveedor = 1");
+         $stmt = $this->dbh->prepare("SELECT * FROM Proveedor where inactivacion_proveedor = 0");
          $stmt->execute();
          return $stmt->fetchAll();
 
@@ -29,7 +29,7 @@ class Proveedor
     {
       try{
         
-        $stmt = $this->dbh->prepare("SELECT * FROM Proveedor WHERE id_proveedor_PK = ? and inactivacion_proveedor = 1");
+        $stmt = $this->dbh->prepare("SELECT * FROM Proveedor WHERE id_proveedor_PK = ? and inactivacion_proveedor = 0");
         $stmt->execute(array($id));
         return $stmt->fetch();
 
@@ -97,7 +97,7 @@ class Proveedor
     { 
       try{
 
-        $sql = "UPDATE Proveedor SET inactivacion_proveedor = 0 WHERE id_proveedor_PK = ?";
+        $sql = "UPDATE Proveedor SET inactivacion_proveedor = 1 WHERE id_proveedor_PK = ?";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute(array($id));
         return true;

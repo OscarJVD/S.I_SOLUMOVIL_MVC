@@ -51,12 +51,13 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <h6 class="dropdown-header">Compras</h6>
-          <a class="dropdown-item" href="#">Ver listado</a>
+          <a class="dropdown-item" href="?c=buy&m=index">Ver listado</a>
           <a class="dropdown-item" href="#">Agregar</a>
           <a class="dropdown-item" href="#"></a>
 
         </div>
       </li>
+      <?php if($_SESSION["rol_user"] == 1):?>
       <li class="nav-item <?php echo $user_s; ?> dropdown">
         <a class="nav-link active dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-fw fa-user"></i>
@@ -72,6 +73,7 @@
           <!-- <a class="dropdown-item" href="blank.html">Blank Page</a> -->
         </div>
       </li>
+     <?php endif; ?>
       <li class="nav-item <?php echo $client_s; ?> dropdown">
         <a class="nav-link  dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-walking"></i>
@@ -104,13 +106,18 @@
           <span>Categorias</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <h6 class="dropdown-header">Categorias</h6>
-          <a class="dropdown-item" href="#">Categoria Producto</a>
-          <a class="dropdown-item" href="#">Categoria Servicio</a>
+          <h6 class="dropdown-header">Categorias Producto</h6>
+          <a class="dropdown-item" href="?c=category&m=index&type=producto">Ver Listado</a>
+          <a class="dropdown-item" href="?c=category&m=create&type=producto">Agregar</a>
+          <div class="dropdown-divider"></div>
+          <h6 class="dropdown-header">Categorias Servicio</h6>
+          <a class="dropdown-item" href="?c=category&m=index&type=servicio">Ver Listado</a>
+          <a class="dropdown-item" href="?c=category&m=create&type=servicio">Agregar</a>
 
 
         </div>
       </li>
+      <?php if($_SESSION["rol_user"] == 1):?>
       <li class="nav-item  <?php echo $report_s; ?> dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-chart-bar"></i>
@@ -134,6 +141,7 @@
           <a class="dropdown-item" href="?c=user&m=loginuserhistory">Login usuario</a>
         </div>
       </li>
+      <?php endif; ?>
     </ul>
 
     <div id="content-wrapper">

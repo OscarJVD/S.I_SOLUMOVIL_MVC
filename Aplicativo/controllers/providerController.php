@@ -11,9 +11,7 @@ class ProviderController
         header("location:?msg=session_expired&type=info");
 
     }
-        if($_SESSION["rol_user"] != 1){
-         header("location:?msg=rol_user_protected&type=danger");
-        }
+
      $this->model = new Proveedor();
    } 
   

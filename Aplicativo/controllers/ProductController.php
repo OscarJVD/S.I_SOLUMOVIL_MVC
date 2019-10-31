@@ -1,4 +1,5 @@
 <?php
+require_once "models/Notificacion.php";
 require_once "models/Producto.php";
 
 class ProductController
@@ -11,9 +12,7 @@ class ProductController
         header("location:?msg=session_expired&type=info");
 
     }
-        if($_SESSION["rol_user"] != 1){
-         header("location:?msg=rol_user_protected&type=danger");
-        }
+     $this->notificacion = new Notificacion();
      $this->model = new Producto();
    } 
   
@@ -86,6 +85,7 @@ class ProductController
 
    public function delete()
    {
+      $this->notificacion->insertar(1,"ha eliminado un producto");
       $response = $this->model->delete($_REQUEST["id"]);
       $msg = $response != false ? "deleted": "dont_deleted";
       header("location:?c=product&m=index&msg=".$msg);     
