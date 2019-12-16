@@ -14,7 +14,7 @@ class Proveedor
     {
       try{
         
-         $stmt = $this->dbh->prepare("SELECT * FROM Proveedor where inactivacion_proveedor = 0");
+         $stmt = $this->dbh->prepare("CALL Consulta_Proveedor()");
          $stmt->execute();
          return $stmt->fetchAll();
 
@@ -29,7 +29,7 @@ class Proveedor
     {
       try{
         
-        $stmt = $this->dbh->prepare("SELECT * FROM Proveedor WHERE id_proveedor_PK = ? and inactivacion_proveedor = 0");
+        $stmt = $this->dbh->prepare("CALL Consulta_Proveedor_uno(?)");
         $stmt->execute(array($id));
         return $stmt->fetch();
 
@@ -42,13 +42,8 @@ class Proveedor
     public function insert($data)
     { 
          try{
-           $sql = "INSERT INTO Proveedor(nombre_proveedor,
-                                         apellido_proveedor,
-                                         direccion_proveedor,
-                                         telefono_proveedor
-                                          ) VALUES (?,?,?,?)";
 
-        $stmt = $this->dbh->prepare($sql);
+        $stmt = $this->dbh->prepare("CALL Guardar_Proveedor(?,?,?,?)");
         $stmt->execute(array(
               $data["nombre"],
               $data["apellido"],
@@ -67,14 +62,8 @@ class Proveedor
     {   
       try{
           $id = filter_var($data["id"],FILTER_SANITIZE_NUMBER_INT);
-          $sql = "UPDATE Proveedor SET  nombre_proveedor             = ?,
-                                      apellido_proveedor           = ?,
-                                      direccion_proveedor          = ?,
-                                      telefono_proveedor           = ?,
-                                      id_estado_FK               = ?
-                                 WHERE id_proveedor_PK = ? ";
 
-            $stmt = $this->dbh->prepare($sql);
+            $stmt = $this->dbh->prepare("CALL Actualizar_Proveedor(?,?,?,?,?,?)");
             $stmt->execute(array(
                                 $data["nombre"],
                                 $data["apellido"],
@@ -90,15 +79,11 @@ class Proveedor
         }
     }
 
-
-
-
     public function delete($id)
     { 
       try{
 
-        $sql = "UPDATE Proveedor SET inactivacion_proveedor = 1 WHERE id_proveedor_PK = ?";
-        $stmt = $this->dbh->prepare($sql);
+        $stmt = $this->dbh->prepare("CALL Eliminar_Proveedor(?)");
         $stmt->execute(array($id));
         return true;
 

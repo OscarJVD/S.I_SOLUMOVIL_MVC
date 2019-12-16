@@ -14,7 +14,7 @@ class Cliente
     {
       try{
         
-         $stmt = $this->dbh->prepare("SELECT * FROM Cliente");
+         $stmt = $this->dbh->prepare("SELECT * FROM Cliente where inactivacion_cliente = 0");
          $stmt->execute();
          return $stmt->fetchAll();
 
@@ -128,6 +128,18 @@ class Cliente
         $sql = "SELECT * FROM Tipo_Documento";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();
+        return $stmt->fetchAll();
+
+      }catch(Exception $e){
+        exit($e->getMessage());
+      }
+    }
+
+    public function busquedaCliente($termino){
+      try{
+        $sql = "SELECT * FROM Cliente where  inactivacion_cliente = 0  and (nombre_cliente like '%' ? '%' or apellido_cliente like  '%' ? '%') ";
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute(array($termino,$termino));
         return $stmt->fetchAll();
 
       }catch(Exception $e){

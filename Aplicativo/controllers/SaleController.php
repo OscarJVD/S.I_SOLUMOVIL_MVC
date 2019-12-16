@@ -1,10 +1,11 @@
 <?php
 
 require_once "models/Venta.php";
-
+require_once "models/Cliente.php";
 class SaleController
 {
    private $model;
+   private $m_cliente;
 
    public function __construct()
    {
@@ -12,6 +13,7 @@ class SaleController
         header("location:?msg=session_expired&type=info");
 
     }
+     $this->m_cliente = new Cliente();
      $this->model = new Venta();
    } 
   
@@ -33,30 +35,34 @@ class SaleController
    public function create()
    {
       $link = "?c=sale&m=index";
-      $name = "Vebtas";
+      $name = "Ventas";
       $metodo = "Crear nueva venta";
       $content = "venta/ventaCreate.php";
       require_once "views/template/home/content.php";
    }
    
    
-//    public function show()
-//    {   
-//        $cats = $this->model->categorias();
-//        $response = $this->model->getone(filter_var($_REQUEST["id"],FILTER_SANITIZE_NUMBER_INT));
-//        $link = "?c=service&m=index";
-//        $name = "Servicios";
-//        $metodo = "Actualizar";
+   public function buscar_cliente()
+   {   
 
-//           if($response){
-//           $content = "service/serviceUpdate.php";
-//           require_once "views/template/home/content.php";
+       $response = $this->m_cliente->busquedaCliente(filter_var($_REQUEST["t"],FILTER_SANITIZE_STRING));
+          if($response){
+            echo json_encode($response);
+         }else{
+            return false;
+         }
+   } 
 
-//          }else{
-//               header("location:?c=service");
-//          }
-//    } 
+   public function datos_cliente()
+   {   
 
+       $response = $this->m_cliente->getone(filter_var($_REQUEST["id"],FILTER_SANITIZE_STRING));
+          if($response){
+            echo json_encode($response);
+         }else{
+            return false;
+         }
+   } 
 //    public function save()
 //      {
 //          $response = $this->model->insert($_POST);

@@ -255,7 +255,27 @@ select c.id_compra_PK, u.nombres_usuario, p.nombre_proveedor ,c.total_compra, da
 -- reportes por fechas
 
 -- select avg(total_venta) from venta where fecha_venta <= curdate() and fecha_venta >= date_sub(curdate(),interval 1 week) group by fecha_venta;
+-- creacion de procedimientos almacenados
+create procedure Guardar_Proveedor(NOMBRE varchar(50),APELLIDO varchar(50),DIRECCION varchar(50),TELEFONO varchar(50))
+INSERT INTO Proveedor(nombre_proveedor, apellido_proveedor,direccion_proveedor,telefono_proveedor) VALUES (NOMBRE,APELLIDO,DIRECCION,TELEFONO);
 
+create procedure Consulta_Proveedor()
+SELECT * FROM Proveedor where inactivacion_proveedor = 0;
+
+
+create procedure Consulta_Proveedor_uno(ID INT)
+SELECT * FROM Proveedor WHERE id_proveedor_PK = ID and inactivacion_proveedor = 0;
+
+create procedure Actualizar_Proveedor(NOMBRE varchar(50),APELLIDO varchar(50),DIRECCION varchar(50),TELEFONO varchar(50),ESTADO INT,ID INT)
+UPDATE Proveedor SET   nombre_proveedor       = NOMBRE,
+                       apellido_proveedor     = APELLIDO ,
+					   direccion_proveedor    = DIRECCION,
+                       telefono_proveedor     = TELEFONO,
+					   id_estado_FK           = ESTADO
+            WHERE id_proveedor_PK = ID; 
+
+create procedure Eliminar_Proveedor(ID INT)
+UPDATE Proveedor SET inactivacion_proveedor = 1 WHERE id_proveedor_PK = ID;
 -- insercion de datos
 insert into Tipo_Notificacion values(null,"producto"),
                                     (null,"servicio"),

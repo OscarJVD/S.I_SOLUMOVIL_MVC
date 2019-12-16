@@ -8,6 +8,7 @@
 
 <!-- Navbar Search -->
 <a class="text-light" href="README.txt">README</a>
+
 <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
   <div class="input-group">
       <img style="width:25px;height:25px" src="<?php echo $_SESSION["img_user"]; ?>" alt="..." class="rounded-circle">

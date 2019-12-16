@@ -35,5 +35,6 @@
    <script src="libs/charts/morris.min.js"></script>
    <!-- graficos delproyecto -->
    <script src="assets/js/charts.js"> </script>
+   <script src="assets/js/facturacion.js"> </script>
  </body>
 </html>
