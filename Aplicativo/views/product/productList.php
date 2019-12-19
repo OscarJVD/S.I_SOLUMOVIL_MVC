@@ -40,7 +40,7 @@
              <td><?php echo $row->nombre_categoria_producto; ?></td>
              <td><?php echo $row->descripcion_marca_producto; ?></td>
              <td><?php echo $row->referencia_producto; ?></td>
-             <td><?php echo $row->stock_producto; ?></td>
+             <td><?php echo $row->stock_producto < 5 ? '<span class="badge badge-danger">'.$row->stock_producto.'</span>': '<span class="badge badge-success">'.$row->stock_producto.'</span>' ; ?></td>
              <td><?php echo number_format($row->precio_producto,2); ?></td>
              <td><?php echo $row->tipo_estado; ?></td>
              <td><?php echo $row->fecha_registro_producto; ?></td>

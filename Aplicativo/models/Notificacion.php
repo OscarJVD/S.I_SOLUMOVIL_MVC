@@ -59,11 +59,11 @@ class Notificacion
   {
     try{
       // consulta den numero de usuarios
-      $stmt = $this->dbh->prepare("SELECT id_usuario_PK  FROM Usuario");
+      $stmt = $this->dbh->prepare("SELECT id_usuario_PK  FROM usuario");
       $stmt->execute();
       $users = $stmt->fetchAll();
       // consulta del numero mas alto
-      $stmt = $this->dbh->prepare("SELECT MAX(id_notificacion_PK) as numero_maximo FROM Notificacion");
+      $stmt = $this->dbh->prepare("SELECT MAX(id_notificacion_PK) as numero_maximo FROM notificacion");
       $stmt->execute();
       $num = $stmt->fetch();
       $numMax = $num->numero_maximo == null ? 1 : $num->numero_maximo + 1 ;
@@ -81,7 +81,7 @@ class Notificacion
       if($insert){
          foreach ($users as $user) {
       
-              $sql = "INSERT INTO Notificacion_Personalizada values(?,?,?,?,?)";
+              $sql = "INSERT INTO notificacion_personalizada values(?,?,?,?,?)";
               $stmt = $this->dbh->prepare($sql);
               $stmt->execute(array($numMax,
                                    $_SESSION["id_user"],

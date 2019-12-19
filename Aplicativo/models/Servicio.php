@@ -14,7 +14,7 @@ class Servicio
     {
       try{
         
-         $stmt = $this->dbh->prepare("SELECT * FROM Consulta_Servicios");
+         $stmt = $this->dbh->prepare("SELECT * FROM consulta_servicios");
          $stmt->execute();
          return $stmt->fetchAll();
 
@@ -29,7 +29,7 @@ class Servicio
     {
       try{
         
-        $stmt = $this->dbh->prepare("SELECT * FROM Servicio WHERE id_servicio_PK = ? and inactivacion_servicio = 0");
+        $stmt = $this->dbh->prepare("SELECT * FROM servicio WHERE id_servicio_PK = ? and inactivacion_servicio = 0");
         $stmt->execute(array($id));
         return $stmt->fetch();
 
@@ -44,7 +44,7 @@ class Servicio
     public function insert($data)
     { 
          try{
-           $sql = "INSERT INTO Servicio(id_categoria_servicio_FK,
+           $sql = "INSERT INTO servicio(id_categoria_servicio_FK,
                                        descripcion_servicio,
                                        precio_servicio) VALUES (?,?,?)";
 
@@ -66,7 +66,7 @@ class Servicio
     {   
       try{
           $id = filter_var($data["id"],FILTER_SANITIZE_NUMBER_INT);
-          $sql = "UPDATE Servicio SET id_categoria_servicio_FK = ?,
+          $sql = "UPDATE servicio SET id_categoria_servicio_FK = ?,
                                       descripcion_servicio     = ?,
                                       precio_servicio          = ?,
                                       id_estado_FK             = ?
@@ -94,7 +94,7 @@ class Servicio
     { 
       try{
 
-        $sql = "UPDATE Servicio SET inactivacion_servicio = 1 WHERE id_servicio_PK = ?";
+        $sql = "UPDATE servicio SET inactivacion_servicio = 1 WHERE id_servicio_PK = ?";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute(array($id));
         return true;
@@ -110,7 +110,7 @@ class Servicio
     { 
       try{
 
-        $sql = "SELECT * FROM Categoria_Servicio WHERE inactivacion_categoria = 0";
+        $sql = "SELECT * FROM categoria_servicio WHERE inactivacion_categoria = 0";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();

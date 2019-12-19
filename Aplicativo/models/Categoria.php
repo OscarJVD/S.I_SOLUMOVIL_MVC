@@ -12,7 +12,7 @@ class Categoria
     public function getall($tipo)
     {
       try{
-        $type = "Categoria_".ucwords($tipo);
+        $type = "categoria_".ucwords($tipo);
          $stmt = $this->dbh->prepare("SELECT * FROM {$type} WHERE inactivacion_categoria = 0");
          $stmt->execute();
          return  $stmt->fetchAll();
@@ -27,7 +27,7 @@ class Categoria
     {
       try{
         
-        $stmt = $this->dbh->prepare("SELECT * FROM Categoria_{$type} WHERE id_categoria_{$type}_PK = ? and inactivacion_categoria = 0");
+        $stmt = $this->dbh->prepare("SELECT * FROM categoria_{$type} WHERE id_categoria_{$type}_PK = ? and inactivacion_categoria = 0");
         $stmt->execute(array($id));
         return $stmt->fetch();
 
@@ -45,7 +45,7 @@ class Categoria
          try{
           $type = filter_var($data["tipo"],FILTER_SANITIZE_STRING);
 
-           $sql = "INSERT INTO Categoria_{$type}(nombre_categoria_{$type},
+           $sql = "INSERT INTO categoria_{$type}(nombre_categoria_{$type},
                                                  descripcion_categoria_{$type}) VALUES (?,?)";
 
         $stmt = $this->dbh->prepare($sql);
@@ -67,7 +67,7 @@ class Categoria
           $type = filter_var($data["tipo"],FILTER_SANITIZE_STRING);
           $id = filter_var($data["id"],FILTER_SANITIZE_NUMBER_INT);
 
-          $sql = "UPDATE Categoria_{$type} SET nombre_categoria_{$type}       = ?,
+          $sql = "UPDATE categoria_{$type} SET nombre_categoria_{$type}       = ?,
                                                descripcion_categoria_{$type}  = ?,
                                                id_estado_FK = ?
                                  WHERE id_categoria_{$type}_PK = ? ";
@@ -93,7 +93,7 @@ class Categoria
       try{
 
         $update = ucwords($type);
-        $sql = "UPDATE Categoria_{$update} SET inactivacion_categoria = 1 WHERE id_categoria_{$type}_PK = ?";
+        $sql = "UPDATE categoria_{$update} SET inactivacion_categoria = 1 WHERE id_categoria_{$type}_PK = ?";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute(array($id));
         return true;

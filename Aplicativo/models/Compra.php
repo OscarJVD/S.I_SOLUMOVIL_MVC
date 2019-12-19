@@ -14,7 +14,7 @@ class Compra
     {
       try{
         
-         $stmt = $this->dbh->prepare("SELECT * FROM Consulta_Compras");
+         $stmt = $this->dbh->prepare("SELECT * FROM consulta_compras");
          $stmt->execute();
          return $stmt->fetchAll();
 

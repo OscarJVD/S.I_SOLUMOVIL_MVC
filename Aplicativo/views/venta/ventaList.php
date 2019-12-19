@@ -8,10 +8,10 @@
      <div class="table-responsive">
        <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
         <thead>
-          <tr>
+        <tr>
              <th>#</th>
-             <th>Usuario</th>
              <th>Cliente</th>
+             <th>Vendedor</th>
              <th>Total</th>
              <th>Estado</th>
              <th>Fecha</th>
@@ -21,8 +21,8 @@
         <tfoot>
         <tr>
              <th>#</th>
-             <th>Usuario</th>
              <th>Cliente</th>
+             <th>Vendedor</th>
              <th>Total</th>
              <th>Estado</th>
              <th>Fecha</th>
@@ -33,16 +33,25 @@
         <?php foreach($rows as $row): ?>
              <tr>
              <th><?php echo $row->id_venta_PK; ?></th>
-             <td><?php echo $row->nombres_usuario; ?></td>
              <td><?php echo $row->nombre_cliente; ?></td>
+             <td><?php echo $row->nombres_usuario; ?></td>
              <td><?php echo number_format($row->total_venta,2); ?></td>
-             <td><?php echo $row->id_estado_venta_FK == 1 ? "Pagado" : "Pendiente" ?></td>
+             <td><?php echo $row->id_estado_venta_FK == 1 ? '<span class="badge badge-success">Pagado</span>' : '<span class="badge badge-warning">Pendiente</span>' ?></td>
              <td><?php echo $row->fecha_venta?></td>
              <td>
-                <a onclick="javascript:return confirm('¿Seguro de Inactivar esta venta?');"
-                 href="?c=sale&m=delete&id=<?php echo $row->id_usuario_PK?>" class="btn btn-outline-default" tabindex="0" 
-                 title="Inactivar" data-toggle="tool"><i class="fas fa-ban"></i></a>
+
+               <a onclick=""
+                 href="?c=sale&m=ver_factura&id=<?php echo $row->id_venta_PK?>" class="btn btn-primary " tabindex="0" 
+                 title="Ver Factura" data-toggle="tool"><i class="fas fa-eye"></i></a>
+                <a  onclick="javascript:return confirm('¿Seguro quieres anular esta venta venta?');"
+                 href="?c=sale&m=anular&id=<?php echo $row->id_venta_PK?>" class="btn <?php echo $row->inactivacion_venta == 0 ? "disabled" : "  btn-danger"; ?> " tabindex="0" 
+                 title="Anular Venta"  data-toggle="tool"><i class="fas fa-ban"></i></a>
+                 
+                 <a onclick=""
+                 href="?c=sale&m=getone&id=<?php echo $row->id_venta_PK?>" class="btn btn-success " tabindex="0" 
+                 title="Editar Estado" data-toggle="tool"><i class="fas fa-pen-square"></i></a>
                </td>
+
              </tr>      
 
         <?php endforeach; ?>
@@ -53,3 +62,4 @@
     </div>
     <div class="card-footer small text-muted">Actualizado Hoy <?php echo date('h:i a');?></div>
   </div>
+

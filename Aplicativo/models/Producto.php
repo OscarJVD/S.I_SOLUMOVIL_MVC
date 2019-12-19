@@ -14,7 +14,7 @@ class Producto
     {
       try{
         
-         $stmt = $this->dbh->prepare("SELECT * FROM Consulta_Productos");
+         $stmt = $this->dbh->prepare("SELECT * FROM consulta_productos");
          $stmt->execute();
          $rows = $stmt->fetchAll();
          return $rows;
@@ -29,7 +29,7 @@ class Producto
     {
       try{
         
-        $stmt = $this->dbh->prepare("SELECT * FROM Producto WHERE id_producto_PK = ? and inactivacion_producto = 0");
+        $stmt = $this->dbh->prepare("SELECT * FROM producto WHERE id_producto_PK = ? and inactivacion_producto = 0");
         $stmt->execute(array($id));
         return $stmt->fetch();
 
@@ -45,12 +45,13 @@ class Producto
     public function insert($data)
     { 
          try{
-           $sql = "INSERT INTO Producto(codigo_producto_PK,
+           $sql = "INSERT INTO producto (codigo_producto_PK,
                                        id_categoria_producto_FK,
                                        id_marca_producto_FK,
                                        referencia_producto,
                                        stock_producto,
-                                       precio_producto) VALUES (?,?,?,?,?,?)";
+                                       precio_producto,
+                                       fecha_registro_producto) VALUES (?,?,?,?,?,?,?)";
 
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute(array(
@@ -59,7 +60,8 @@ class Producto
               $data["marca"],
               $data["referencia"],
               $data["stock"],
-              $data["precio"]
+              $data["precio"],
+              date("Y-m-d")
         ));
         return true;
  
@@ -73,7 +75,7 @@ class Producto
     {   
       try{
           $id = filter_var($data["id"],FILTER_SANITIZE_NUMBER_INT);
-          $sql = "UPDATE Producto SET codigo_producto_PK      = ?,
+          $sql = "UPDATE producto SET codigo_producto_PK      = ?,
                                      id_categoria_producto_FK = ?,
                                      id_marca_producto_FK     = ?,
                                      referencia_producto      = ?,
@@ -107,7 +109,7 @@ class Producto
     { 
       try{
 
-        $sql = "UPDATE Producto SET inactivacion_producto = 1 WHERE id_producto_PK = ?";
+        $sql = "UPDATE producto SET inactivacion_producto = 1 WHERE id_producto_PK = ?";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute(array($id));
         return true;
@@ -123,7 +125,7 @@ class Producto
     { 
       try{
 
-        $sql = "SELECT * FROM Categoria_Producto Where inactivacion_categoria = 0";
+        $sql = "SELECT * FROM categoria_producto Where inactivacion_categoria = 0";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();
@@ -138,7 +140,7 @@ class Producto
     { 
       try{
 
-        $sql = "SELECT * FROM Marca_Producto";
+        $sql = "SELECT * FROM marca_producto WHERE estado_marca_producto = 1";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();

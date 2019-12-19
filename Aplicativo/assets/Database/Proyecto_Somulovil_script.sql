@@ -1,3 +1,4 @@
+drop database if exists Solumovil;
 create database Solumovil;
 use Solumovil;
 
@@ -34,19 +35,21 @@ direccion_usuario varchar(100) null,
 id_estado_FK int null,
 id_rol_usuario_FK int not null,
 foto_usuario varchar(100) null,
-fecha_creacion_usuario date not null default now(),
+fecha_creacion_usuario date not null,
 inactivacion_usuario boolean not null default 1,
 primary key (id_usuario_PK),
 foreign key (id_tipo_documento_FK) references Tipo_Documento (id_tipo_documento_PK),
 foreign key (id_estado_FK) references Estado (id_estado_PK),
 foreign key (Id_rol_usuario_FK) references rol_usuario (id_rol_usuario_PK)
 );
+
+
 -- tablas de estadisticas
  create table Registro_Login(
  id_registro_login int not nulL auto_increment,
  id_usuario_FK int not null,
- fecha date not null default now(),
- hora  time not null default now(),
+ fecha date not null,
+ hora  time not null,
  primary key(id_registro_login),
  foreign key (id_usuario_FK) references Usuario(id_usuario_PK)
  );
@@ -100,6 +103,7 @@ foreign key (id_estado_FK) references Estado(id_estado_PK)
 
 create table Marca_Producto(
 id_marca_producto_PK INT NOT NULL AUTO_INCREMENT,
+estado_marca_producto boolean not null,
 descripcion_marca_producto varchar(100),
 Primary key(id_marca_producto_PK)
 );
@@ -113,7 +117,7 @@ referencia_producto varchar(100) not null,
 stock_producto int not null,
 id_estado_FK int null default 1,
 precio_producto double not null,
-fecha_registro_producto date null default now(),
+fecha_registro_producto date null,
 inactivacion_producto boolean not null default 0,
 primary key (id_producto_PK),
 foreign key (id_marca_producto_FK) references Marca_Producto (id_marca_producto_PK),
@@ -167,6 +171,13 @@ foreign key (id_cliente_FK) references Cliente (id_cliente_PK),
 foreign key (id_estado_venta_FK) references Estado_Venta (id_estado_venta_PK)
 );
 
+select rl.id_registro_login,u.nombres_usuario,u.apellidos_usuario,rl.fecha,rl.hora 
+from Registro_Login as rl inner join Usuario as u on u.id_usuario_PK = rl.id_usuario_FK order by rl.id_registro_login desc;
+
+SELECT * FROM detalle_venta WHERE id_venta_FK = 1;
+SELECT * FROM detalle_venta WHERE id_venta_FK = 1;
+SELECT * FROM VENTA;
+SELECT * FROM detalle_venta;
 
 create table Detalle_Venta(
 id_venta_FK int not null,
@@ -243,10 +254,11 @@ FROM Notificacion as n  inner join Notificacion_Personalizada as np on n.id_noti
        -- date_format(fecha_venta,"%Y-%c-%d")                
 -- datos de la venta
 create view Consulta_Ventas as
-select v.id_venta_PK, u.nombres_usuario, c.nombre_cliente ,v.total_venta, date_format(v.fecha_venta,"%Y-%m-%d") as fecha_venta ,v.id_estado_venta_FK,v.inactivacion_venta
+select v.id_venta_PK, u.nombres_usuario, c.nombre_cliente,c.apellido_cliente ,v.total_venta, date_format(v.fecha_venta,"%Y-%m-%d") as fecha_venta ,v.id_estado_venta_FK,v.inactivacion_venta
           from venta as v inner join Usuario as u  on u.id_usuario_PK = v.id_usuario_FK 
-						  inner join cliente as c on  c.id_cliente_PK = v.id_cliente_FK
-                          where inactivacion_venta = 0;
+						  inner join cliente as c on  c.id_cliente_PK = v.id_cliente_FK ORDER BY v.id_venta_PK DESC;
+                          
+                          
 create view Consulta_Compras as
 select c.id_compra_PK, u.nombres_usuario, p.nombre_proveedor ,c.total_compra, date_format(c.fecha_compra,"%Y-%m-%d") as fecha_compra ,c.inactivacion_compra
           from compra as c inner join Usuario as u  on u.id_usuario_PK = c.id_usuario_FK 
@@ -255,6 +267,7 @@ select c.id_compra_PK, u.nombres_usuario, p.nombre_proveedor ,c.total_compra, da
 -- reportes por fechas
 
 -- select avg(total_venta) from venta where fecha_venta <= curdate() and fecha_venta >= date_sub(curdate(),interval 1 week) group by fecha_venta;
+
 -- creacion de procedimientos almacenados
 create procedure Guardar_Proveedor(NOMBRE varchar(50),APELLIDO varchar(50),DIRECCION varchar(50),TELEFONO varchar(50))
 INSERT INTO Proveedor(nombre_proveedor, apellido_proveedor,direccion_proveedor,telefono_proveedor) VALUES (NOMBRE,APELLIDO,DIRECCION,TELEFONO);
@@ -262,7 +275,35 @@ INSERT INTO Proveedor(nombre_proveedor, apellido_proveedor,direccion_proveedor,t
 create procedure Consulta_Proveedor()
 SELECT * FROM Proveedor where inactivacion_proveedor = 0;
 
+create procedure productos_DV (VALOR varchar(100)) 
+SELECT p.id_producto_PK,p.inactivacion_producto,p.codigo_producto_PK,cp.nombre_categoria_producto,m.descripcion_marca_producto,p.referencia_producto,p.stock_producto, p.precio_producto FROM Producto as p inner join Categoria_Producto as cp on P.id_categoria_producto_FK = cp.id_categoria_producto_PK
+                            inner join Marca_Producto as m on p.id_marca_producto_FK = m.id_marca_producto_PK WHERE (cp.nombre_categoria_producto
+                            like VALOR  OR m.descripcion_marca_producto like VALOR) AND p.inactivacion_producto = 0;
+                            
+create procedure producto_getone_DV (ID INT) 
+SELECT p.id_producto_PK,p.codigo_producto_PK,cp.nombre_categoria_producto,m.descripcion_marca_producto,p.referencia_producto,p.stock_producto, p.precio_producto FROM Producto as p inner join Categoria_Producto as cp on P.id_categoria_producto_FK = cp.id_categoria_producto_PK
+                            inner join Marca_Producto as m on p.id_marca_producto_FK = m.id_marca_producto_PK
+                            WHERE id_producto_PK = ID;
 
+create procedure servicios_DV (VALOR varchar(100)) 
+SELECT s.id_servicio_PK,cs.nombre_categoria_servicio,s.descripcion_servicio,s.precio_servicio
+           FROM servicio as s inner join Categoria_Servicio as cs on s.id_categoria_servicio_FK = cs.id_categoria_servicio_PK
+           WHERE (cs.nombre_categoria_servicio like VALOR  OR s.descripcion_servicio like VALOR)  AND s.inactivacion_servicio = 0;                            
+                            
+create procedure servicio_getone_DV (ID INT) 
+SELECT s.id_servicio_PK,cs.nombre_categoria_servicio,s.descripcion_servicio,s.precio_servicio
+           FROM servicio as s inner join Categoria_Servicio as cs on s.id_categoria_servicio_FK = cs.id_categoria_servicio_PK
+           WHERE s.id_servicio_PK = ID;                            
+
+create procedure Venta (ID INT)                             
+select v.id_venta_PK,v.subtotal_venta,v.descuento_venta, u.nombres_usuario, c.nombre_cliente,c.apellido_cliente ,v.total_venta, date_format(v.fecha_venta,"%Y-%m-%d") as fecha_venta ,v.id_estado_venta_FK,v.inactivacion_venta
+          from venta as v inner join Usuario as u  on u.id_usuario_PK = v.id_usuario_FK 
+						  inner join cliente as c on  c.id_cliente_PK = v.id_cliente_FK WHERE v.id_venta_PK = ID;                            
+
+
+			
+                                     
+                            
 create procedure Consulta_Proveedor_uno(ID INT)
 SELECT * FROM Proveedor WHERE id_proveedor_PK = ID and inactivacion_proveedor = 0;
 
@@ -291,7 +332,8 @@ insert into Estado values(null,"Activo"),
                           (null,"Inactivo");
 
 insert into Estado_Venta values(null,"Pagado"),
-                                (null,"Pendiente");
+                                (null,"Pendiente"),
+                                (null,"Anulado");
 
 insert into Tipo_Documento values(null,"Cédula de Ciudadanía","CC"),
                                   (null,"Cédula de Extranjeria","CE"),
@@ -300,130 +342,120 @@ insert into Tipo_Documento values(null,"Cédula de Ciudadanía","CC"),
 insert into Rol_Usuario values(null,"Administrador"),
                                (null,"Vendedor");
 
-insert into Usuario values (null,1,'1006715848','Andres Felipe','Lobaton Vivas',"Satanicos2002",'$2y$10$XyvH1ydPZmamGNx.KzmYq.M2NsSQE58hIv4XOw7BIOTmLSXL6d61O',
-                           'andrespipe021028@gmail.com','3219216905','cll 66 #125-05',1,1,"assets/img/user1/facebook.jpg","2018-06-23",0),
-                           (null,2,'1002435648','Oscar Javier','Vargas Diaz',"Sixtharlings94",'$2y$10$uaoUu5OtWul9lfbgJ3dz5Oq3ojwvw8OvKCswdQBMhfMo/YumUUYYK',
-                           'oscarvar_94@gmail.com','3456783675','kra 94 #32a-54',1,2,"assets/img/user/avatar.png","2019-04-23",0),
-                           (null,3,'6743231','Juan Camilo','Perez Alvarado',"AnonimousHacker",'$2y$10$yHIlKb9nGDNIq0NghNRkFel7D/jNIhDN/VlMo7ongTUgp86xFoVfm',
-                           'jcamilo_21@gmail.com','3234567892','cll 115 #54-05',1,2,"assets/img/user/avatar.png","2019-10-19",0);
+insert into Usuario values (null,2,'1002435648','Oscar Javier','Vargas Diaz',"Sixtharlings94",'$2y$10$XyvH1ydPZmamGNx.KzmYq.M2NsSQE58hIv4XOw7BIOTmLSXL6d61O',
+                           'oscarvar_94@gmail.com','3456783675','kra 94 #32a-54',1,2,"assets/img/user/avatar.png","2019-04-23",1);
 
-insert into Categoria_Producto values(null,"Celulares","",1,0),
-									 (null,"Parlantes","",1,0),
-                                     (null,"Auriculares","",1,0),
-                                     (null,"Tablets","",2,0),
-                                     (null,"Computadores","",1,0);
-insert into Marca_Producto values(null,"Huawei"),
-                                 (null,"Iphone"),
-                                 (null,"Motorola"),
-                                 (null,"Avvio"),
-                                 (null,"Xiaomi");
+insert into Categoria_Producto values(null,"Celular","",1,0);
+insert into Marca_Producto values(null,1,"Huawei");
                                  
-insert into Producto values(null,"P01",2,2,"Y-23",0,1,6000,"2018-01-22",0),
-						   (null,"P02",2,2,"Y-34",23,1,10000,"2018-02-22",0),
-                           (null,"P03",5,2,"Y-6",2,1,30000,"2018-03-20",0),
-                           (null,"P04",5,3,"Y-5",0,1,200000,"2018-04-22",0),
-                           (null,"P05",1,3,"Y-563",0,1,40000,"2018-05-22",0),
-                           (null,"P06",1,3,"Y-90",0,1,68000,"2018-06-22",0),
-                           (null,"P07",4,1,"Y-89",0,1,33400,"2018-07-22",0),
-                           (null,"P08",4,5,"Y-34",0,1,304300,"2018-08-22",0),
-                           (null,"P09",1,5,"Y-24",0,1,3003220,"2018-09-22",0),
-                           (null,"P10",3,5,"Y-243",12,1,300230,"2018-10-22",0),
-                           (null,"P11",3,3,"Y-34",56,1,6000,"2018-11-22",0),
-                           (null,"P12",3,1,"Y-23",23,1,3000,"2018-12-22",0),
-                           (null,"P13",4,3,"Y-26",12,1,4000,"2019-01-22",0),
-                           (null,"P14",4,4,"Y-34",23,1,2000,"2019-01-22",0),
+insert into Producto values(null,"P01",2,2,"Y-23",0,1,6000,"2018-01-22",0);
+						--    (null,"P02",2,2,"Y-34",23,1,10000,"2018-02-22",0),
+                        --    (null,"P03",5,2,"Y-6",2,1,30000,"2018-03-20",0),
+                        --    (null,"P04",5,3,"Y-5",0,1,200000,"2018-04-22",0),
+                        --    (null,"P05",1,3,"Y-563",0,1,40000,"2018-05-22",0),
+                        --    (null,"P06",1,3,"Y-90",0,1,68000,"2018-06-22",0),
+                        --    (null,"P07",4,1,"Y-89",0,1,33400,"2018-07-22",0),
+                        --    (null,"P08",4,5,"Y-34",0,1,304300,"2018-08-22",0),
+                        --    (null,"P09",1,5,"Y-24",0,1,3003220,"2018-09-22",0),
+                        --    (null,"P10",3,5,"Y-243",12,1,300230,"2018-10-22",0),
+                        --    (null,"P11",3,3,"Y-34",56,1,6000,"2018-11-22",0),
+                        --    (null,"P12",3,1,"Y-23",23,1,3000,"2018-12-22",0),
+                        --    (null,"P13",4,3,"Y-26",12,1,4000,"2019-01-22",0),
+                        --    (null,"P14",4,4,"Y-34",23,1,2000,"2019-01-22",0),
                            (null,"P15",5,4,"Y-76",54,1,4000,"2019-01-22",0);
                            
-insert into cliente values(null,2,"100674565","Juan","Lopez",null,"juanlopez_90@gmail.com","45457984",1,0),
-                          (null,1,"100456723","Pedro","Perez",null,"p0edro_perez_23@gmail.com","31275485",1,0),
-                          (null,1,"528956742","Camilo","Ortiz",null,"asada_89@gmail.com","312675675",1,0),
-                          (null,1,"672312905","Andres","Alvarado",null,"lacasa_roja21@gmail.com","413767545",1,0),
-                          (null,2,"986534762","Salomon","Salamanca",null,"juancholomon@gmail.com","315897878",1,0),
-                          (null,3,"123124663","Andrea","Perdomo",null,"andrea_per@gmail.com","311232454",1,0),
-                          (null,1,"323232323","Camila","Diaz",null,"camila_d@gmail.com","32189345345",2,0),
-                          (null,2,"860945609","Jose","Vivaz",null,"joce_vi@gmail.com","3167893434",1,0),
-                          (null,1,"845874655","Jolman","Romero",null,"jolaman123@gmail.com","314678673",2,0),
-                          (null,1,"100786454","Rocio","Rodriguez",null,"rocio_cacha@gmail.com","3125789789",1,0),
-                          (null,1,"100398811","Jeison","Medina",null,"jeison_medina6002@gmail.com","3234242343",2,0);
+insert into cliente values(null,2,"100674565","Juan","Lopez",null,"juanlopez_90@gmail.com","45457984",1,0);
+                        --   (null,1,"100456723","Pedro","Perez",null,"p0edro_perez_23@gmail.com","31275485",1,0),
+                        --   (null,1,"528956742","Camilo","Ortiz",null,"asada_89@gmail.com","312675675",1,0),
+                        --   (null,1,"672312905","Andres","Alvarado",null,"lacasa_roja21@gmail.com","413767545",1,0),
+                        --   (null,2,"986534762","Salomon","Salamanca",null,"juancholomon@gmail.com","315897878",1,0),
+                        --   (null,3,"123124663","Andrea","Perdomo",null,"andrea_per@gmail.com","311232454",1,0),
+                        --   (null,1,"323232323","Camila","Diaz",null,"camila_d@gmail.com","32189345345",2,0),
+                        --   (null,2,"860945609","Jose","Vivaz",null,"joce_vi@gmail.com","3167893434",1,0),
+                        --   (null,1,"845874655","Jolman","Romero",null,"jolaman123@gmail.com","314678673",2,0),
+                        --   (null,1,"100786454","Rocio","Rodriguez",null,"rocio_cacha@gmail.com","3125789789",1,0),
+                        --   (null,1,"100398811","Jeison","Medina",null,"jeison_medina6002@gmail.com","3234242343",2,0);
 						
-insert into proveedor values (null,"Alfredo","Olaya",1,"32167321","cll34 #12-76",0),
-                             (null,"Ramon","Murillo",1,"321132313","cll56 #16-76",0),
-                             (null,"Felipe","Cardozo",1,"356778543","cll45 #09-7",0),
-                             (null,"Javier","Herrera",1,"3345345345",null,0),
-                             (null,"Dimedez","Pantoja",1,"3534436565",null,0),
-                             (null,"James","Galan",1,"34535455",null,0),
-                             (null,"Falcao","Calderon",2,"67868677878",null,0),
-                             (null,"Santiago","Amado",2,"35756756756",null,0),
-                             (null,"Pablo","Lopez",2,"3675656767",null,0),
-                             (null,"Marcela","Amaya",2,"378978979789",null,0),
-                             (null,"Juliana","Montero",2,"34234234234",null,0);
+insert into proveedor values (null,"Alfredo","Olaya",1,"32167321","cll34 #12-76",0);
+                            --  (null,"Ramon","Murillo",1,"321132313","cll56 #16-76",0),
+                            --  (null,"Felipe","Cardozo",1,"356778543","cll45 #09-7",0),
+                            --  (null,"Javier","Herrera",1,"3345345345",null,0),
+                            --  (null,"Dimedez","Pantoja",1,"3534436565",null,0),
+                            --  (null,"James","Galan",1,"34535455",null,0),
+                            --  (null,"Falcao","Calderon",2,"67868677878",null,0),
+                            --  (null,"Santiago","Amado",2,"35756756756",null,0),
+                            --  (null,"Pablo","Lopez",2,"3675656767",null,0),
+                            --  (null,"Marcela","Amaya",2,"378978979789",null,0),
+                            --  (null,"Juliana","Montero",2,"34234234234",null,0);
 							
-insert into Categoria_Servicio values (null,"Cambio de pantalla","Equipos moviles y tablets",1,0),
-                                      (null,"Cambio de pin","",1,0),
-                                      (null,"Cambio targeta madre","Equipos moviles y computadores",1,0),
-                                      (null,"Formateo","Equipos moviles y computadores",1,0),
-                                      (null,"Cambio de logica","",2,0);
+insert into Categoria_Servicio values (null,"Cambio de pantalla","Equipos moviles y tablets",1,0);
+                                    --   (null,"Cambio de pin","",1,0),
+                                    --   (null,"Cambio targeta madre","Equipos moviles y computadores",1,0),
+                                    --   (null,"Formateo","Equipos moviles y computadores",1,0),
+                                    --   (null,"Cambio de logica","",2,0);
                                      
-insert into Servicio values(null,1,"huawei p20",251400,1,0),
-                           (null,2,"samsung",25100,2,0),
-                           (null,2,"smartphone 3",295000,1,0), 
-						   (null,1,"cambio de logica de un huawei p30 ",20090,1,0), 
-						   (null,5,"cambio de sistema operativo de un huawei y360",200550,2,0);      
+insert into Servicio values(null,1,"huawei p20",251400,1,0);
+                        --    (null,2,"samsung",25100,2,0),
+                        --    (null,2,"smartphone 3",295000,1,0), 
+						--    (null,1,"cambio de logica de un huawei p30 ",20090,1,0), 
+						--    (null,5,"cambio de sistema operativo de un huawei y360",200550,2,0);      
                       
-insert into Venta values (null,1,1,30000,3200,26800,"2018-05-12 12:34:32",1,0),
-                         (null,1,2,50000,0,50000,"2018-06-02 12:34:32",2,0),
-                         (null,1,3,20000,0,20000,"2018-07-12 12:34:32",1,0),
-                         (null,1,4,10000,0,10000,"2018-08-12 12:34:32",1,0),
-                         (null,1,5,20000,5000,15000,"2018-09-09 12:34:32",1,0),
-                         (null,1,6,9000,3000,6000,"2018-10-10 12:34:32",1,0),
-                         (null,1,5,60000,0,60000,"2018-12-12 12:34:32",1,0),
-                         (null,1,3,450000,50000,400000,"2019-02-23 12:34:32",2,0),
-                         (null,2,4,230000,20000,210000,"2019-03-12 12:34:32",2,0),
-                         (null,2,5,130000,0,130000,"2019-03-12 10:23:32",2,0),
-                         (null,2,1,35000,0,35000,"2019-10-20 12:34:32",1,0),
-                         (null,2,1,35000,0,35000,"2019-10-25 12:34:32",1,0);
+-- insert into Venta values (null,1,1,30000,3200,26800,"2018-05-12 12:34:32",1,1),
+--                          (null,1,2,50000,0,50000,"2018-06-02 12:34:32",2,1),
+--                          (null,1,3,20000,0,20000,"2018-07-12 12:34:32",1,1),
+--                          (null,1,4,10000,0,10000,"2018-08-12 12:34:32",1,0),
+--                          (null,1,5,20000,5000,15000,"2018-09-09 12:34:32",1,1),
+--                          (null,1,6,9000,3000,6000,"2018-10-10 12:34:32",1,0),
+--                          (null,1,5,60000,0,60000,"2018-12-12 12:34:32",1,0),
+--                          (null,1,3,450000,50000,400000,"2019-02-23 12:34:32",2,1),
+--                          (null,2,4,230000,20000,210000,"2019-03-12 12:34:32",2,0),
+--                          (null,2,5,130000,0,130000,"2019-03-12 10:23:32",2,0),
+--                          (null,2,1,35000,0,35000,"2019-10-20 12:34:32",1,0),
+--                          (null,2,1,35000,0,35000,"2019-10-25 12:34:32",1,0);
                          
-insert into Detalle_Venta values (1,2,null,5,30000,null),
-                                 (1,3,null,2,15000,null),
-                                 (1,4,null,1,3000,null),
-                                 (2,null,2,5,50000,null),
-                                 (2,null,1,5,40000,null),
-                                 (2,4,null,2,20000,null),
-                                 (3,2,null,2,10000,null),
-                                 (3,null,4,2,100000,null),
-                                 (4,null,5,1,300000,null),
-                                 (5,null,4,2,500000,null),
-                                 (6,null,4,1,30000,null);
-insert into Compra values (null,1,2,100000,"2018-01-12 12:34:32",0),
-						  (null,1,2,200000,"2018-02-13 12:34:32",0),
-                          (null,1,2,100000,"2018-03-14 12:34:32",0),
-                          (null,1,1,300000,"2018-04-02 12:34:32",0),
-                          (null,1,2,200000,"2018-05-22 12:34:32",0),
-                          (null,2,4,400000,"2018-06-82 12:34:32",0),
-                          (null,2,4,500000,"2018-07-12 12:34:32",0),
-                          (null,2,4,800000,"2019-01-19 12:34:32",0),
-                          (null,2,1,150000,"2019-02-13 12:34:32",0),
-                          (null,3,2,120000,"2019-03-12 12:34:32",0),
-                          (null,3,3,90000,"2019-04-14 12:34:32",0),
-                          (null,3,3,20000,"2019-05-29 12:34:32",0),
-                          (null,3,5,100000,"2019-05-12 12:34:32",0);
+-- insert into Detalle_Venta values (1,2,null,5,30000,null),
+--                                  (1,3,null,2,15000,null),
+--                                  (1,4,null,1,3000,null),
+--                                  (2,null,2,5,50000,null),
+--                                  (2,null,1,5,40000,null),
+--                                  (2,4,null,2,20000,null),
+--                                  (3,2,null,2,10000,null),
+--                                  (3,null,4,2,100000,null),
+--                                  (4,null,5,1,300000,null),
+--                                  (5,null,4,2,500000,null),
+--                                  (6,null,4,1,30000,null);
+
+
+-- insert into Compra values (null,1,2,100000,"2018-01-12 12:34:32",0),
+-- 						  (null,1,2,200000,"2018-02-13 12:34:32",0),
+--                           (null,1,2,100000,"2018-03-14 12:34:32",0),
+--                           (null,1,1,300000,"2018-04-02 12:34:32",0),
+--                           (null,1,2,200000,"2018-05-22 12:34:32",0),
+--                           (null,2,4,400000,"2018-06-82 12:34:32",0),
+--                           (null,2,4,500000,"2018-07-12 12:34:32",0),
+--                           (null,2,4,800000,"2019-01-19 12:34:32",0),
+--                           (null,2,1,150000,"2019-02-13 12:34:32",0),
+--                           (null,3,2,120000,"2019-03-12 12:34:32",0),
+--                           (null,3,3,90000,"2019-04-14 12:34:32",0),
+--                           (null,3,3,20000,"2019-05-29 12:34:32",0),
+--                           (null,3,5,100000,"2019-05-12 12:34:32",0);
                           
-insert into Detalle_Compra values (1,2,40,30000,null),
-                                  (2,3,3,20000,null),
-                                  (1,3,50,18000,null),
-                                  (1,3,10,40000,null),
-                                  (2,2,20,16000,null),
-                                  (2,8,30,55000,null),
-                                  (3,8,40,15000,null),
-                                  (3,4,50,3000,null),
-                                  (3,6,5,50000,null),
-                                  (4,4,8,7000,null),
-                                  (5,4,9,30000,null),
-                                  (6,3,2,207000,null),
-                                  (7,2,9,306000,null),
-                                  (8,3,8,500000,null),
-                                  (9,3,8,30000,null),
-                                  (10,6,10,30000,null),
-                                  (10,6,10,30000,null),
-                                  (10,7,5,90000,null);
+-- insert into Detalle_Compra values (1,2,40,30000,null),
+--                                   (2,3,3,20000,null),
+--                                   (1,3,50,18000,null),
+--                                   (1,3,10,40000,null),
+--                                   (2,2,20,16000,null),
+--                                   (2,8,30,55000,null),
+--                                   (3,8,40,15000,null),
+--                                   (3,4,50,3000,null),
+--                                   (3,6,5,50000,null),
+--                                   (4,4,8,7000,null),
+--                                   (5,4,9,30000,null),
+--                                   (6,3,2,207000,null),
+--                                   (7,2,9,306000,null),
+--                                   (8,3,8,500000,null),
+--                                   (9,3,8,30000,null),
+--                                   (10,6,10,30000,null),
+--                                   (10,6,10,30000,null),
+--                                   (10,7,5,90000,null);
 -- cabio de datos a la base de datos en detalle de venta en id_producto_FK Y id_servicio_PK de not null a null;

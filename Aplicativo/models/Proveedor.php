@@ -14,7 +14,7 @@ class Proveedor
     {
       try{
         
-         $stmt = $this->dbh->prepare("CALL Consulta_Proveedor()");
+         $stmt = $this->dbh->prepare("CALL consulta_proveedor()");
          $stmt->execute();
          return $stmt->fetchAll();
 
@@ -29,7 +29,7 @@ class Proveedor
     {
       try{
         
-        $stmt = $this->dbh->prepare("CALL Consulta_Proveedor_uno(?)");
+        $stmt = $this->dbh->prepare("CALL consulta_proveedor_uno(?)");
         $stmt->execute(array($id));
         return $stmt->fetch();
 
@@ -43,7 +43,7 @@ class Proveedor
     { 
          try{
 
-        $stmt = $this->dbh->prepare("CALL Guardar_Proveedor(?,?,?,?)");
+        $stmt = $this->dbh->prepare("CALL guardar_proveedor(?,?,?,?)");
         $stmt->execute(array(
               $data["nombre"],
               $data["apellido"],
@@ -63,7 +63,7 @@ class Proveedor
       try{
           $id = filter_var($data["id"],FILTER_SANITIZE_NUMBER_INT);
 
-            $stmt = $this->dbh->prepare("CALL Actualizar_Proveedor(?,?,?,?,?,?)");
+            $stmt = $this->dbh->prepare("CALL actualizar_proveedor(?,?,?,?,?,?)");
             $stmt->execute(array(
                                 $data["nombre"],
                                 $data["apellido"],
@@ -83,7 +83,7 @@ class Proveedor
     { 
       try{
 
-        $stmt = $this->dbh->prepare("CALL Eliminar_Proveedor(?)");
+        $stmt = $this->dbh->prepare("CALL eliminar_proveedor(?)");
         $stmt->execute(array($id));
         return true;
 

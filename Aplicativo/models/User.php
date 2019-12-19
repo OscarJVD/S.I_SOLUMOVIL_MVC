@@ -15,7 +15,7 @@ class User
     public function loginUser($user)
     {
       try{
-       $sql = "SELECT * from Usuario where nickname_usuario = :nickname";
+       $sql = "SELECT * from usuario where nickname_usuario = :nickname  and inactivacion_usuario = 1";
        $stmt = $this->dbh->prepare($sql);
        $stmt->bindParam(":nickname",$user);
        $stmt->execute();
@@ -41,7 +41,7 @@ class User
 
    public function loginPass($pass){
 
-    $sql = "SELECT  * from Usuario where nickname_usuario = :nickname";
+    $sql = "SELECT  * from usuario where nickname_usuario = :nickname  and inactivacion_usuario = 1";
     try{
       $stmt = $this->dbh->prepare($sql);
       $stmt->bindParam(":nickname",$_SESSION["nickname_user"]);
@@ -57,7 +57,7 @@ class User
         $fecha = date("Y-m-d"); 
         $hora = date("G:i:s"); 
         
-        $stmt = $this->dbh->prepare("INSERT INTO Registro_Login (id_usuario_FK,fecha,hora) VALUES ( ?,?,? )");
+        $stmt = $this->dbh->prepare("INSERT INTO registro_login (id_usuario_FK,fecha,hora) VALUES ( ?,?,? )");
         $stmt->execute(array($response->id_usuario_PK,$fecha,$hora));
         
         return true;
@@ -75,7 +75,7 @@ class User
     public function getall()
     {
       try{
-         $stmt = $this->dbh->prepare("SELECT * FROM usuario WHERE inactivacion_usuario = 0");
+         $stmt = $this->dbh->prepare("SELECT * FROM usuario WHERE inactivacion_usuario = 1");
          $stmt->execute();
          $rows = $stmt->fetchAll();
           return $rows;
@@ -92,7 +92,7 @@ class User
     {
       try{
         
-        $stmt = $this->dbh->prepare("SELECT * from usuario where id_usuario_PK = :id and inactivacion_usuario = 0");
+        $stmt = $this->dbh->prepare("SELECT * from usuario where id_usuario_PK = :id and inactivacion_usuario = 1");
         $stmt->bindParam(":id",$id);
         $stmt->execute();
         return  $stmt->fetch();
@@ -109,7 +109,7 @@ class User
     public function insert($data)
     { 
          try{
-           $sql = "INSERT into Usuario(id_tipo_documento_FK,
+           $sql = "INSERT into usuario(id_tipo_documento_FK,
                                        numero_documento_usuario,
                                        nombres_usuario,
                                        apellidos_usuario,
@@ -120,7 +120,8 @@ class User
                                        direccion_usuario,
                                        id_estado_FK,
                                        id_rol_usuario_FK,
-                                       foto_usuario) values (:tipoDoc,
+                                       foto_usuario,
+                                       fecha_creacion_usuario) values (:tipoDoc,
                                                                 :numDoc,
                                                                 :names,
                                                                 :surnames,
@@ -131,7 +132,8 @@ class User
                                                                 :dir,
                                                                 :est,
                                                                 :rol,
-                                                                :img)";
+                                                                :img,
+                                                                :fecha)";
 
         $stmt = $this->dbh->prepare($sql);
 
@@ -153,6 +155,8 @@ class User
         $stmt->bindParam(":est",$data["est"]);
         $stmt->bindParam(":rol",$data["rol"]);
         $stmt->bindParam(":img",$rutadb);
+        $stmt->bindParam(":fecha",date("Y-m-d "));
+
 
         $stmt->execute();
 
@@ -166,7 +170,7 @@ class User
     public function update($data,$img)
     {   
         $id = filter_var($data["id_user"],FILTER_SANITIZE_NUMBER_INT);
-        $sql = "select clave_usuario from Usuario where id_usuario_PK = ?";
+        $sql = "select clave_usuario from usuario where id_usuario_PK = ?";
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindParam(1,$id);
         $stmt->execute();
@@ -175,14 +179,14 @@ class User
         if($data["pass"] !== $response->clave_usuario){
                
                $pass = encrypt_password($data["pass"]);
-               $sql = "update Usuario set clave_usuario = ? where id_usuario_PK = ?";
+               $sql = "update usuario set clave_usuario = ? where id_usuario_PK = ?";
                $stmt = $this->dbh->prepare($sql);
                $stmt->bindParam(1,$pass);
                $stmt->bindParam(2,$data["id_user"]);
                $stmt->execute();
         }
         try{
-          $sql = "UPDATE Usuario set id_tipo_documento_FK     = :tipoDoc,
+          $sql = "UPDATE usuario set id_tipo_documento_FK     = :tipoDoc,
                                      numero_documento_usuario = :numDoc,
                                      nombres_usuario          = :names,
                                      apellidos_usuario        = :surnames ,
@@ -252,7 +256,7 @@ class User
       $ruta = "assets/img/user".$id;
           if(file_exists($ruta)){
 
-              $sql = "SELECT foto_usuario from Usuario where id_usuario_PK = ?";
+              $sql = "SELECT foto_usuario from usuario where id_usuario_PK = ?";
               $stmt = $this->dbh->prepare($sql);
               $stmt->execute(array($id));
               $foto = $stmt->fetch();   
@@ -266,7 +270,7 @@ class User
              }
           }
       try{
-        $sql = "UPDATE Usuario SET inactivacion_usuario = 1 WHERE id_usuario_PK = :id";
+        $sql = "UPDATE usuario SET inactivacion_usuario = 1 WHERE id_usuario_PK = :id";
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindParam(":id",$id);
         $stmt->execute();
@@ -279,7 +283,7 @@ class User
     public function tipoDocumento()
     { 
       try{
-        $sql = "SELECT * FROM Tipo_Documento";
+        $sql = "SELECT * FROM tipo_documento";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();
@@ -306,7 +310,7 @@ class User
   public function loginuserhistory()
   {
     try{
-    $stmt = $this->dbh->prepare("SELECT * FROM Historial_Registro_Login");
+    $stmt = $this->dbh->prepare("SELECT * FROM historial_registro_login");
     $stmt->execute();
     return $stmt->fetchAll();
 

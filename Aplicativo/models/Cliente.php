@@ -14,7 +14,7 @@ class Cliente
     {
       try{
         
-         $stmt = $this->dbh->prepare("SELECT * FROM Cliente where inactivacion_cliente = 0");
+         $stmt = $this->dbh->prepare("SELECT * FROM cliente where inactivacion_cliente = 0");
          $stmt->execute();
          return $stmt->fetchAll();
 
@@ -29,7 +29,7 @@ class Cliente
     {
       try{
         
-        $stmt = $this->dbh->prepare("SELECT * FROM Cliente WHERE id_cliente_PK = ? and inactivacion_cliente = 0");
+        $stmt = $this->dbh->prepare("SELECT * FROM cliente WHERE id_cliente_PK = ? and inactivacion_cliente = 0");
         $stmt->execute(array($id));
         return $stmt->fetch();
 
@@ -44,7 +44,7 @@ class Cliente
     public function insert($data)
     { 
          try{
-           $sql = "INSERT INTO Cliente(id_tipo_documento_FK,
+           $sql = "INSERT INTO cliente(id_tipo_documento_FK,
                                        numero_documento_cliente,
                                        nombre_cliente,
                                        apellido_cliente,
@@ -75,7 +75,7 @@ class Cliente
     {   
       try{
           $id = filter_var($data["id"],FILTER_SANITIZE_NUMBER_INT);
-          $sql = "UPDATE Cliente SET  id_tipo_documento_FK       = ?,
+          $sql = "UPDATE cliente SET  id_tipo_documento_FK       = ?,
                                       Numero_documento_cliente   = ?,
                                       nombre_cliente             = ?,
                                       apellido_cliente           = ?,
@@ -111,7 +111,7 @@ class Cliente
     { 
       try{
 
-        $sql = "UPDATE Cliente SET inactivacion_cliente = 1 WHERE id_cliente_PK = ?";
+        $sql = "UPDATE cliente SET inactivacion_cliente = 1 WHERE id_cliente_PK = ?";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute(array($id));
         return true;
@@ -125,7 +125,7 @@ class Cliente
     public function tipoDocumento()
     { 
       try{
-        $sql = "SELECT * FROM Tipo_Documento";
+        $sql = "SELECT * FROM tipo_documento";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();
@@ -137,7 +137,7 @@ class Cliente
 
     public function busquedaCliente($termino){
       try{
-        $sql = "SELECT * FROM Cliente where  inactivacion_cliente = 0  and (nombre_cliente like '%' ? '%' or apellido_cliente like  '%' ? '%') ";
+        $sql = "SELECT * FROM cliente where  inactivacion_cliente = 0  and (nombre_cliente like '%' ? '%' or apellido_cliente like  '%' ? '%') ";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute(array($termino,$termino));
         return $stmt->fetchAll();

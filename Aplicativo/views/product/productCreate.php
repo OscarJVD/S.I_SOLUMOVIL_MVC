@@ -12,8 +12,8 @@
 
                    <div class="form-group">
                         <label>Codigo</label>
-                        <small class="text-muted">(Opcional)</small>
-                        <input type="text" name="codigo" class="form-control" placeholder="Ingrese el codigo">
+                        <small class="text-muted">(Obligatorio)</small>
+                        <input type="text" name="codigo" required class="form-control" placeholder="Ingrese el codigo">
                     </div>
                     
                     <div class="form-group">

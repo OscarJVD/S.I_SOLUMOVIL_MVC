@@ -17,6 +17,10 @@
           <a class="dropdown-item" href="?c=product&m=index">Ver listado</a>
           <a class="dropdown-item" href="?c=product&m=create">Agregar</a>
           <a class="dropdown-item" href="#"></a>
+          <h6 class="dropdown-header">Marcas</h6>
+          <a class="dropdown-item" href="?c=marca&m=index">Ver listado</a>
+          <a class="dropdown-item" href="?c=marca&m=create">Agregar</a>
+          <a class="dropdown-item" href="#"></a>
         </div>
       </li>
       <li class="nav-item <?php echo $service_s; ?> dropdown">
@@ -44,8 +48,8 @@
 
         </div>
       </li>
-      <li class="nav-item <?php echo $buy_s; ?> dropdown">
-        <a class="nav-link  dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <li class="nav-item <?php echo $buy_s; ?> dropdown" onclick="javascript:return false; alert('Trabajaremos en ello Pronto.')">
+        <a class="nav-link  dropdown-toggle" onclick=" alert('Trabajaremos en ello Pronto.')" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-shopping-cart"></i>
           <span>Compras</span>
         </a>
@@ -118,8 +122,8 @@
         </div>
       </li>
       <?php if($_SESSION["rol_user"] == 1):?>
-      <li class="nav-item  <?php echo $report_s; ?> dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <li class="nav-item  <?php echo $report_s; ?> dropdown" onclick="alert('Trabajaremos en ello Pronto.')">
+        <a class="nav-link dropdown-toggle" onclick="javascript:return false; alert('Trabajaremos en ello Pronto.')" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-chart-bar"></i>
           <span>Reportes</span>
         </a>

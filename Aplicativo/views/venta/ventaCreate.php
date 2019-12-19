@@ -1,3 +1,6 @@
+
+<div id="resp_venta"></div>
+
 <div class="card mb-3">
     <div class="card-header">
     <div class="row">
@@ -15,55 +18,13 @@
 <form method="post" enctype="multipart/form-data" id="form">
           <input type="hidden" name="c" value="product">
           <input type="hidden" name="m" value="save">
-          <input type="hidden" name="id_user" value="<?php echo $_SESSION["id_user"]; ?>">
-          <input type="hidden" name="id_cliente" id="id_cliente" value="">
+          <!-- datos de la venta -->
+          <input type="hidden" id="id_user" value="<?php echo $_SESSION["id_user"]; ?>">
+          <input type="hidden" id="id_cliente">
 
-<!--        
-                   <div class="form-group">
-                        <label>Codigo</label>
-                        <small class="text-muted">(Opcional)</small>
-                        <input type="text" name="codigo" class="form-control" placeholder="Ingrese el codigo">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Categoria</label>
-                        <small class="text-muted">(Obligatorio)</small>
-                         <select class="form-control" name="categoria" required=>
-                             <option selected="on" disabled="on" value="">-Selecciona una categoria-</option>
-                           <?php foreach($cats as $cat):?>
-                              <option value="<?php echo isset($cat->id_categoria_producto_PK) ? $cat->id_categoria_producto_PK : ''; ?>"><?php echo isset($cat->nombre_categoria_producto) ? $cat->nombre_categoria_producto : ''; ?></option>
-                          <?php endforeach;?> 
-                        </select> 
-                    </div>
-                    <div class="form-goup">
-                        <label>Marca</label>
-                        <small class="text-muted">(Obligatorio)</small>
-                         <select class="form-control" name="marca" required>
-                             <option selected="on" disabled="on" value="">-Selecciona una marca-</option>
-                           <?php foreach($marcas as $marca):?>
-                              <option value="<?php echo isset($marca->id_marca_producto_PK) ? $marca->id_marca_producto_PK : ''; ?>"><?php echo isset($marca->descripcion_marca_producto) ? $marca->descripcion_marca_producto : ''; ?></option>
-                          <?php endforeach;?> 
-                        </select> 
-                    </div>
-                    <div class="form-group">
-                        <label>Referencia</label>
-                        <small class="text-muted">(Obligatorio)</small>
-                        <input type="text" name="referencia" class="form-control" placeholder="Ingrese la referencia" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Stock (numero de existencias)</label>
-                        <input type="text" name="stock" class="form-control" placeholder="Ingrese el stock" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Precio unitario</label>
-                        <small class="text-muted">(Obligatorio)</small>
-                        <input type="text" name="precio" class="form-control" placeholder="Ingrese la referencia" required>
-                    </div>
-               <div class="text-right">
-                    <button type="submit" class="btn btn-success">Registrar Producto</button>
-                    <button type="button" onclick="window.location.replace('?c=product&m=index');"  class="btn btn-secondary">Cancelar</button>
-                 </div>
-           </form> -->
+
+
+
 
 				<div class="form-group row">
 				  <label  class="col-md-2 control-label">Cliente</label>
@@ -75,11 +36,11 @@
 				  </div>
 				  <label for="tel1" class="col-md-1 control-label">Tel</label>
 							<div class="col-md-2">
-								<input type="text" class="form-control input-sm" id="tel" placeholder="Teléfono" readonly>
+								<input type="text" class="form-control input-sm" id="tel" placeholder="" readonly>
 							</div>
 					<label for="mail" class="col-md-1 control-label">Email</label>
 							<div class="col-md-3">
-								<input type="text" class="form-control input-sm" id="mail" placeholder="Email" readonly>
+								<input type="text" class="form-control input-sm" id="mail" placeholder="" readonly>
 							</div>
 				 </div>
 				 <div class="form-group row">
@@ -92,72 +53,119 @@
 				 	<div class="col-md-2">
 				 		<input type="text" class="form-control input-sm" id="fecha" value="<?php echo date("d/m/Y");?>" readonly>
 				 	</div>
-				 	<label for="email" class="col-md-1 control-label">Pago</label>
+           <label for="estado" class="col-md-1 control-label">Estado</label>
 				 	<div class="col-md-3">
-                     <input class="form-control input-sm" value="Efectivo"  readonly>
+                       <select class="form-control" id="estado" required=>
+                           <option selected="on" disabled="on" value="">-Selecciona un estado-</option>
+                           <option value="1" selected>Pagado</option>
+                           <option value="2">Pendiente</option>
+                       </select> 
 
 				 	</div>
 				 </div>
-                 <hr>
-                 <!-- ------ -->
-                 <div class="form-group row">
-				  <label  class="col-md-2 control-label">Producto <small class="text-muted">Categoria</small></label>
-				  <div class="col-md-4">
-                  <div class="form-group">
-                        
-                         <select class="form-control" name="categoria" required=>
-                             <option selected="on" disabled="on" value="">-- Selecciona una categoria --</option>
-                           <?php foreach($cats as $cat):?>
-                              <option value="<?php echo isset($cat->id_categoria_producto_PK) ? $cat->id_categoria_producto_PK : ''; ?>"><?php echo isset($cat->nombre_categoria_producto) ? $cat->nombre_categoria_producto : ''; ?></option>
-                          <?php endforeach;?> 
-                        </select> 
-                    </div>                         
-				  </div>
-				  <label  class="col-md-2 control-label">Producto <small class="text-muted">Marca</small></label>
-				 	<div class="col-md-4">
-                     <div class="form-group">
-                         <select class="form-control" name="marca" required>
-                             <option selected="on" disabled="on" value="">-- Selecciona una marca -- </option>
-                           <?php foreach($marcas as $marca):?>
-                              <option value="<?php echo isset($marca->id_marca_producto_PK) ? $marca->id_marca_producto_PK : ''; ?>"><?php echo isset($marca->descripcion_marca_producto) ? $marca->descripcion_marca_producto : ''; ?></option>
-                          <?php endforeach;?> 
-                        </select> 
-                        </div>
-                        </div>
-                    </div>
+        
+        <hr style="background-color:gray; height:3px">
 
-                    <div class="form-group row">
-				  <label  class="col-md-2 control-label">Producto <small class="text-muted">Categoria</small></label>
-				  <div class="col-md-10">
-                  <div class="form-group">
-                            <input type="text" name="cantidad" class="form-control" id="">
-                    </div>                         
-				  </div>
-                  </div>
+         <div class="col-md-12" style="display:none" id="seleccion_venta">
 
-                    <div class="form-group row">
-				  <label  class="col-md-2 control-label">Precio</label>
-				  <div class="col-md-4">
-                  <div class="form-group">
-                  <input type="text" name="cantidad" class="form-control" id="">
-                    </div>                         
-				  </div>
-				  <label  class="col-md-2 control-label">Cantidad</label>
-				 	<div class="col-md-4">
-                     <div class="form-group">
-                          <input type="text" name="cantidad" class="form-control" id="">
-                        </div>
-                        </div>
-                    </div>
+					<div class="float-right">
+						<button type="button" class="btn btn-default border" data-toggle="modal" data-target=".agregar_servicio">
+            <i class="fas fa-plus-square"></i> Agregar Servicio
+						</button>
+						<button type="button" class="btn btn-default border" data-toggle="modal" data-target=".agregar_producto">
+            <i class="fas fa-plus-circle"></i> Agregar producto
+						</button>
+						<button type="button" class="btn btn-default border" onclick="alert('Pronto Haremos este servicio')">
+            <i class="fas fa-print"></i> Imprimir
+						</button>
+					</div>	
+				</div>
+        <br>
+        
+<!-- ------------------------------------------------ -->
+<!-- tabla de muestra de detalle de venta -->
+<div class="table-responsive my-4" >
+<table class="table" id="t_detalle_venta" style="display:none">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">TIPO</th>
+      <th scope="col">CANTIDAD</th>
+      <th scope="col">DESCRIPCION</th>
+      <th scope="col">PRECIO UNI.</th>
+      <th scope="col">PRECIO TOTAL</th>
+    </tr>
+  </thead>
+  <tbody id="mostrar_DV">
 
-                  <div class="form-group">
-                     <button type="button" class="btn btn-outline-primary btn-block"> Agregar Producto </button>                       
-				  </div>
-
-
-
-  </form>
+  </tbody>
+</table>
+</div>
+<div class="col-md-12">
+    <button type="button" id="registrar_venta" disabled class="btn btn-success"> <i class="fas fa-plus"></i> Registrar Nueva Factura</button>
+    <span id="btn_new"></span>
+</div>
     </div>
       <div class="card-footer small text-muted">Actualizado Hoy <?php echo date('h:i a');?></div>
   </div>
 </div>
+
+
+
+
+
+<!-- ---------------------------------------- -->
+<!-- modales de soervicio y producto -->
+
+<!-- Large modal -->
+<div class="modal fade agregar_producto" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Agregar Producto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+               
+            <div id="cart_detalle_venta"></div>
+            <div class="form-group">
+                <input type="text" id="buscar_producto" class="form-control" autofocus placeholder="Buscar producto por categoria ó marca">
+            </div>
+            <div id="detalle_venta"></div>
+        
+      </div>
+      <div class="modal-footer">
+      <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> -->
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade agregar_servicio" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Agregar Servicio</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div id="cart_detalle_venta_s"></div>
+            <div class="form-group">
+                <input type="text" id="buscar_servicio" class="form-control" autofocus  placeholder="Buscar servicio por categoria ó descripcion">
+            </div>
+            <div id="detalle_venta_s"></div>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> -->
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ---------------------------------------- -->
